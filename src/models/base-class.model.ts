@@ -1,5 +1,5 @@
 import { Prop } from '@nestjs/mongoose';
-import { SystemStatus } from 'src/libs';
+import { SystemStatus } from 'src/libs/shared';
 import { v4 as uuid } from 'uuid';
 
 export abstract class BaseClass {

@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-import { FieldConstraints, VerificationStatus } from 'src/libs';
 import { BaseClass } from './base-class.model';
+import { FieldConstraints, VerificationStatus } from 'src/libs/shared';
 
 export type GroupDocument = Group & Document;
 
@@ -11,14 +11,14 @@ export class Group extends BaseClass {
   @Prop({
     required: true,
     lowercase: true,
-    match: FieldConstraints.CODE.PATTERN,
+    match: FieldConstraints.CODE_PATTERN,
   })
   code!: string;
 
   @Prop({
     required: true,
     trim: true,
-    maxlength: FieldConstraints.NAME.MAX_LENGTH,
+    maxlength: FieldConstraints.MAX_NAME_LENGTH,
   })
   name!: string;
 
@@ -28,6 +28,7 @@ export class Group extends BaseClass {
   @Prop({ required: false }) // Optional course name
   courseName?: string;
 
+  @Prop({ required: false }) // Optional description
   @Prop({ required: false }) // Optional description
   description?: string;
 

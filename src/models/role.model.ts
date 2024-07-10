@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { FieldConstraints } from 'src/libs';
 import { BaseClass } from './base-class.model';
+import { FieldConstraints } from 'src/libs/shared';
 
 export type RoleDocument = Role & Document;
 
@@ -10,15 +10,15 @@ export class Role extends BaseClass {
   @Prop({
     required: true,
     lowercase: true,
-    maxlength: FieldConstraints.CODE.MAX_LENGTH,
-    match: FieldConstraints.CODE.PATTERN,
+    maxlength: FieldConstraints.MAX_CODE_LENGTH,
+    match: FieldConstraints.CODE_PATTERN,
   })
   code!: string;
 
   @Prop({
     required: true,
     trim: true,
-    maxlength: FieldConstraints.NAME.MAX_LENGTH,
+    maxlength: FieldConstraints.MAX_NAME_LENGTH,
   })
   name!: string;
 
