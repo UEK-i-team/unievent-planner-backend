@@ -24,6 +24,8 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
     'no-eval': 'error',
     'unicorn/no-fn-reference-in-iterator': 'off',
     'unicorn/no-array-for-each': 'off',
@@ -112,12 +114,6 @@ module.exports = {
         max: 2,
         maxEOF: 1,
         maxBOF: 0,
-      },
-    ],
-    'max-len': [
-      'warn',
-      {
-        code: 160,
       },
     ],
     'no-self-compare': 'error',
