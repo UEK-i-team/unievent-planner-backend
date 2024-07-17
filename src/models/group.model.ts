@@ -11,14 +11,14 @@ export class Group extends BaseClass {
   @Prop({
     required: true,
     lowercase: true,
-    match: FieldConstraints.CODE_PATTERN,
+    match: FieldConstraints.CODE.PATTERN,
   })
   code!: string;
 
   @Prop({
     required: true,
     trim: true,
-    maxlength: FieldConstraints.MAX_NAME_LENGTH,
+    maxlength: FieldConstraints.NAME.MAX_LENGTH,
   })
   name!: string;
 

@@ -12,19 +12,19 @@ export class UserAccount extends BaseClass {
     unique: true,
     trim: true,
     sparse: true,
-    maxlength: FieldConstraints.MAX_USERNAME_LENGTH,
+    maxlength: FieldConstraints.USERNAME.MAX_LENGTH,
   })
   username!: string;
 
   @Prop({
     required: false,
-    maxlength: FieldConstraints.MAX_FIRST_NAME_LENGTH,
+    maxlength: FieldConstraints.FIRST_NAME.MAX_LENGTH,
   })
   firstName?: string;
 
   @Prop({
     required: false,
-    maxlength: FieldConstraints.MAX_LAST_NAME_LENGTH,
+    maxlength: FieldConstraints.LAST_NAME.MAX_LENGTH,
   })
   lastName?: string;
 

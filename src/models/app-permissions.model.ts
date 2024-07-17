@@ -11,7 +11,7 @@ export class AppPermissions {
     lowercase: true,
     trim: true,
     enum: Action,
-    maxlength: FieldConstraints.MAX_ACTION_LENGTH,
+    maxlength: FieldConstraints.ACTION.MAX_LENGTH,
   })
   action!: Action;
 
@@ -20,7 +20,7 @@ export class AppPermissions {
     lowercase: true,
     trim: true,
     enum: Subject,
-    maxlength: FieldConstraints.MAX_SUBJECT_LENGTH,
+    maxlength: FieldConstraints.SUBJECT.MAX_LENGTH,
   })
   subject!: Subject;
 }

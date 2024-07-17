@@ -10,15 +10,15 @@ export class Role extends BaseClass {
   @Prop({
     required: true,
     lowercase: true,
-    maxlength: FieldConstraints.MAX_CODE_LENGTH,
-    match: FieldConstraints.CODE_PATTERN,
+    maxlength: FieldConstraints.CODE.MAX_LENGTH,
+    match: FieldConstraints.CODE.PATTERN,
   })
   code!: string;
 
   @Prop({
     required: true,
     trim: true,
-    maxlength: FieldConstraints.MAX_NAME_LENGTH,
+    maxlength: FieldConstraints.NAME.MAX_LENGTH,
   })
   name!: string;
 
