@@ -34,8 +34,8 @@ export class UserAccount extends BaseClass {
   @Prop({ required: true, unique: true })
   email!: string;
 
-  @Prop({ required: true, type: String, ref: 'Role' })
-  role!: string;
+  @Prop({ required: true, default: [], type: [String], ref: 'Role' })
+  role!: string[];
 
   @Prop({ required: true, default: [], type: [String], ref: 'Group' })
   groups!: string[];

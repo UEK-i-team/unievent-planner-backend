@@ -8,6 +8,26 @@ export class FieldConstraints {
   static readonly MAX_ACTION_LENGTH: 30;
   static readonly MAX_SUBJECT_LENGTH: 30;
 
+  static readonly FIRST_NAME = {
+    MAX_LENGTH: 50,
+  };
+
+  static readonly LAST_NAME = {
+    MAX_LENGTH: 50,
+  };
+
+  static readonly COURSE_NAME = {
+    MAX_LENGTH: 50,
+  };
+
+  static readonly DESCRIPTION = {
+    MAX_LENGTH: 200,
+  };
+
+  static readonly CODE = {
+    MAX_LENGTH: 50,
+    PATTERN: /^[a-z0-9-]+$/,
+  };
   //Patterns
   static readonly CODE_PATTERN: RegExp = /^[a-z0-9-]+$/;
 }
