@@ -1,7 +1,7 @@
 import { createLogger, format, transports } from 'winston';
 
 const customFormat = format.printf(({ timestamp, level, stack, message }) => {
-  return `${timestamp} - [${level.toUpperCase().padEnd(7)}] - ${stack || message}`;
+  return `${timestamp} - [${level.toUpperCase().padEnd(1)}] - ${stack || message}`;
 });
 
 const options = {
