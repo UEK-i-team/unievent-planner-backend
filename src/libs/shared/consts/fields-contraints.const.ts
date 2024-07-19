@@ -21,4 +21,12 @@ export class FieldConstraints {
   static readonly SUBJECT = {
     MAX_LENGTH: 30,
   };
+
+  static readonly COURSE_NAME = {
+    MAX_LENGTH: 50,
+  };
+
+  static readonly DESCRIPTION = {
+    MAX_LENGTH: 200,
+  };
 }
