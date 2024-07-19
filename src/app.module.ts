@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { MongooseModels } from './models';
-import { GroupsModule } from './groups/groups.module';
+//import { MongooseModule } from '@nestjs/mongoose';
+//import { MongooseModels } from './models';
 import { CoreModule } from './core/core.module';
 
 @Module({

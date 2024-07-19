@@ -8,7 +8,7 @@ export class JoinGroupDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
-  @Matches(/^[a-z0-9-]+$/)
+  @Matches(/^[aA-z0-9-]+$/)
   code: string;
 }
 //dekorator match

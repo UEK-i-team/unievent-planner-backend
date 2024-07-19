@@ -4,7 +4,7 @@ import { validate } from 'class-validator';
 @Injectable()
 export class CodesService {
   private codeToGroupId = {
-    scode123: 'group1',
+    sCode123: 'group1',
     ucode456: 'group2',
     acode789: 'group3',
   }; // TODO zamienić na faktyczną bazę danych
@@ -37,7 +37,7 @@ export class CodesService {
   private getCodeStatus(code: string): string {
     // TODO: Replace this logic with actual status checking logic
     const statusMap = {
-      scode123: 'active',
+      sCode123: 'active',
       ucode456: 'used',
       acode789: 'expired',
     };
