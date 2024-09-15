@@ -1,9 +1,22 @@
 import { Module } from '@nestjs/common';
-// import { MongooseModule } from '@nestjs/mongoose';
-// import { MongooseModels } from './models';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { getMongoConnectionString } from './libs/internal';
 
 @Module({
-  imports: [],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.local', '.env'],
+      isGlobal: true,
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        uri: getMongoConnectionString(configService),
+      }),
+    }),
+  ],
   controllers: [],
   providers: [],
 })
