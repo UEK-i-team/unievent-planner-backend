@@ -6,7 +6,7 @@ const customFormat = format.printf(({ timestamp, level, stack, message }) => {
 
 const options = {
   file: {
-    filename: 'error.log',
+    filename: './logger/error.log',
     level: 'error',
   },
   console: {
@@ -20,25 +20,14 @@ const devLogger = {
     format.errors({ stack: true }),
     customFormat,
   ),
-  transports: [new transports.Console(options.console)],
-};
-
-const prodLogger = {
-  format: format.combine(
-    format.timestamp(),
-    format.errors({ stack: true }),
-    format.json(),
-  ),
   transports: [
     new transports.File(options.file),
     new transports.File({
-      filename: 'combine.log',
+      filename: './logger/combine.log',
       level: 'info',
     }),
+    new transports.Console(options.console),
   ],
 };
 
-const instanceLogger =
-  process.env.NODE_ENV === 'production' ? prodLogger : devLogger;
-
-export const instance = createLogger(instanceLogger);
+export const instance = createLogger(devLogger);
