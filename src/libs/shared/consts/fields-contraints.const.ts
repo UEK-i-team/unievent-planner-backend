@@ -7,7 +7,6 @@ export class FieldConstraints {
   };
   static readonly USERNAME = {
     MAX_LENGTH: 50,
-    PATTERN: /^[a-zA-Z0-9-_]+$/,
   };
   static readonly CODE = {
     MAX_LENGTH: 50,
@@ -22,10 +21,12 @@ export class FieldConstraints {
   static readonly SUBJECT = {
     MAX_LENGTH: 30,
   };
-  static readonly EMAIL = {
-    MAX_LENGTH: 120,
+
+  static readonly COURSE_NAME = {
+    MAX_LENGTH: 50,
   };
-  static readonly CONTENT = {
-    PATTERN: /^[a-zA-Z0-9]{6}$/,
+
+  static readonly DESCRIPTION = {
+    MAX_LENGTH: 200,
   };
 }

@@ -1,24 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { BaseClass } from './base.model';
+import { BaseClass } from './base-class.model';
 import { AnnouncementTargetType } from 'src/libs/shared';
-
-export type AnnouncementTargetDocument = AnnouncementTarget & Document;
-export class AnnouncementTarget {
-  @Prop({
-    required: true,
-    lowercase: true,
-    trim: true,
-    enum: AnnouncementTargetType,
-  })
-  type!: AnnouncementTargetType;
-
-  @Prop({ default: [], required: true, type: [String], select: false })
-  value!: string[];
-}
-
-export const AnnouncementTargetSchema =
-  SchemaFactory.createForClass(AnnouncementTarget);
 
 export type AnnouncementDocument = Announcement & Document;
 
@@ -36,8 +19,23 @@ export class Announcement extends BaseClass {
   @Prop({ required: true })
   endDate!: Date;
 
-  @Prop({ required: true })
-  target: AnnouncementTarget;
+  @Prop({ required: true, enum: AnnouncementTargetType })
+  targetType!: AnnouncementTargetType;
+
+  @Prop({ required: false, type: [String], select: false }) // Optional target value (array)
+  targetValue?: string[];
+
+  @Prop({
+    required: true,
+    type: String,
+    ref: 'User',
+    readonly: true,
+    select: false,
+  })
+  createdBy!: string;
+
+  @Prop({ required: true, type: String, ref: 'User' })
+  updatedBy!: string;
 
   @Prop({ required: false })
   expiresAt?: Date;

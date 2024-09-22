@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-import { BaseClass } from './base.model';
+import { BaseClass } from './base-class.model';
 import { FieldConstraints, VerificationStatus } from 'src/libs/shared';
 
 export type GroupDocument = Group & Document;
@@ -25,10 +25,10 @@ export class Group extends BaseClass {
   @Prop({ required: true })
   avatarUrl!: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false }) // Optional course name
   courseName?: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false }) // Optional description
   description?: string;
 
   @Prop({
@@ -38,29 +38,35 @@ export class Group extends BaseClass {
   })
   verificationStatus!: VerificationStatus;
 
-  @Prop({ required: false })
+  @Prop({ required: false }) // Optional rejection reason
   rejectionReason?: string;
 
-  @Prop({ required: true, type: String, ref: 'UserAccount' })
+  @Prop({ required: true, type: String, ref: 'User' })
   president!: string;
 
-  @Prop({
-    default: [],
-    required: true,
-    type: [String],
-    select: false,
-    ref: 'JoinCode',
-  })
+  @Prop({ required: true, type: [String], select: false })
   codes!: string[];
 
   @Prop({
     required: true,
     default: [],
     type: [String],
-    ref: 'UserAccount',
+    ref: 'User',
     select: false,
   })
   members!: string[];
+
+  @Prop({
+    required: true,
+    type: String,
+    ref: 'User',
+    readonly: true,
+    select: false,
+  })
+  createdBy!: string;
+
+  @Prop({ required: true, type: String, ref: 'User' })
+  updatedBy: string;
 }
 
 export const GroupSchema = SchemaFactory.createForClass(Group);
