@@ -6,11 +6,15 @@ const customFormat = format.printf(({ timestamp, level, stack, message }) => {
 
 const options = {
   file: {
-    filename: './logger/error.log',
+    filename: './logs/error.log',
     level: 'error',
   },
   console: {
     level: 'silly',
+    colorize: true,
+  },
+  ExceptionHandlers: {
+    filename: './logs/exceptions.log',
   },
 };
 
@@ -23,11 +27,15 @@ const devLogger = {
   transports: [
     new transports.File(options.file),
     new transports.File({
-      filename: './logger/combine.log',
+      filename: './logs/combine.log',
       level: 'info',
     }),
     new transports.Console(options.console),
   ],
 };
 
-export const instance = createLogger(devLogger);
+export const WinstonLogger = createLogger(devLogger);
+
+WinstonLogger.exceptions.handle(
+  new transports.File({ filename: './logs/exceptions.log' }),
+);
