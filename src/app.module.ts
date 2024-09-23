@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { getMongoConnectionString } from './libs/internal';
+import { getMongoConnectionString } from './libs';
 
 @Module({
   imports: [
