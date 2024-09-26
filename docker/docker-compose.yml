@@ -8,4 +8,4 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: dev
       MONGO_INITDB_DATABASE: dev
     ports:
-      - "27017:27017"
+      - '27017:27017'
