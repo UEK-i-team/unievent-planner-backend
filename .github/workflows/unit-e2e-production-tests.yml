@@ -1,0 +1,82 @@
+name: CI Pipeline - Tests and Deploy to Render
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!develop'
+    tags:
+      - 'production-*' 
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js for tests
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        env:
+          MONGODB_HOST: localhost
+          MONGODB_PORT: 27017
+          MONGODB_DATABASE: dev
+          MONGODB_USER: root
+          MONGODB_PASSWORD: dev
+          MONGO_URI: mongodb://root:dev@localhost:27017/dev
+        run: npm run test
+
+      - name: Run e2e tests
+        env:
+          MONGODB_HOST: localhost
+          MONGODB_PORT: 27017
+          MONGODB_DATABASE: dev
+          MONGODB_USER: root
+          MONGODB_PASSWORD: dev
+          MONGO_URI: mongodb://root:dev@localhost:27017/dev
+        run: npm run test:e2e
+
+  build-and-deploy:
+    if: startsWith(github.ref, 'refs/tags/production-') 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js for build and deploy
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Wersja Node.js dla produkcji
+
+      - name: Install dependencies
+        run: npm install --production
+
+      - name: Build project
+        run: npm run build
+
+      # - name: Deploy to Render
+      #   env:
+      #     RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}  # ID Render service should be added to github secrets in the future)
+      #     RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}        # API Key from Render should be added to GitHub Secrets)
+      #   run: |
+      #     curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+      #     -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+      #     -d ''
