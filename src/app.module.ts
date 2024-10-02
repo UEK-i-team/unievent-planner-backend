@@ -15,9 +15,10 @@ import { UpserDefaultsService } from './upser-defaults/upser-defaults.service';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        uri: getMongoConnectionString(configService),
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const uri = `mongodb://${configService.get<string>('MONGODB_HOST')}:${configService.get<string>('MONGODB_PORT')}/${configService.get<string>('MONGODB_DATABASE')}`;
+        return { uri };
+      },
     }),
     MongooseModule.forFeature(MongooseModels),
   ],
