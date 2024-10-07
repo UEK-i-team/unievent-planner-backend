@@ -37,7 +37,7 @@ export class GroupsController {
         await this.groupsService.addStudentToGroup(groupId, userId);
         return { message: 'Student został pomyślnie dodany do grupy' };
       } else {
-        // TODO: add logic later
+        throw new 
         throw new HttpException(
           'Grupa nie została znaleziona',
           HttpStatus.NOT_FOUND
