@@ -11,7 +11,6 @@ import { randomBytes } from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Group } from 'src/models';
 import { Model } from 'mongoose';
-import { HttpExceptionFilter } from 'src/libs/internal/filters';
 @Injectable()
 export class GroupsService {
   @InjectModel(Group.name) private readonly groupModel: Model<Group>;

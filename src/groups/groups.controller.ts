@@ -43,7 +43,6 @@ export class GroupsController {
         );
       }
     } catch (error) {
-      console.error(error);
       throw new HttpException('Błąd', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

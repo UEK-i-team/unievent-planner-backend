@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class CodesService {
   private codeToGroupId = {
-    'code123': 'group1',
-    'code456': 'group2',
+    code123: 'group1',
+    code456: 'group2',
   }; //  TODO zamienić na faktyczną baze danych
 
   async validateCode(code: string): Promise<string | null> {
