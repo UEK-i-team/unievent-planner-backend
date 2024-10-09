@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MongooseModels } from './models';
-import { GroupsModule } from './groups/groups.module';
+import { getMongoConnectionString } from './libs';
+import { GroupsService } from './groups/groups.service';
+import { GroupsController } from './groups/groups.controller';
+import { Group, GroupSchema, UserAccount, UserAccountSchema } from './models';
 
 @Module({
   imports: [
@@ -16,8 +19,12 @@ import { GroupsModule } from './groups/groups.module';
         uri: getMongoConnectionString(configService),
       }),
     }),
+    MongooseModule.forFeature([
+      { name: UserAccount.name, schema: UserAccountSchema },
+      { name: Group.name, schema: GroupSchema },
+    ]),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [GroupsController],
+  providers: [GroupsService],
 })
 export class AppModule {}

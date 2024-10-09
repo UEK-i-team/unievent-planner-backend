@@ -15,7 +15,7 @@ import { CreateGroupDto } from './dtos/create-group.dto';
 export class GroupsController {
   constructor(
     private readonly codesService: CodesService,
-    private readonly groupsService: GroupsService
+    private readonly groupsService: GroupsService,
   ) {}
 
   @Post()
@@ -39,11 +39,11 @@ export class GroupsController {
       } else {
         throw new HttpException(
           'Grupa nie została znaleziona',
-          HttpStatus.NOT_FOUND
+          HttpStatus.NOT_FOUND,
         );
       }
     } catch (error) {
-      // TODO: add logic later
+      console.error(error);
       throw new HttpException('Błąd', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
