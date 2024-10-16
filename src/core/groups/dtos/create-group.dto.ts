@@ -1,13 +1,13 @@
 import { Optional } from '@nestjs/common';
 import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
-import { FieldConstraints } from 'src/libs/shared';
+import { FieldConstraints } from 'src/libs';
 
 export class CreateGroupDto {
   @Expose()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(FieldConstraints.FIRST_NAME.MAX_LENGTH)
+  @MaxLength(FieldConstraints.NAME.MAX_LENGTH)
   name!: string;
 
   @Expose()
@@ -25,5 +25,5 @@ export class CreateGroupDto {
   @Expose()
   @IsString()
   @IsNotEmpty()
-  avatar!: string;
+  avatarUrl!: string;
 }

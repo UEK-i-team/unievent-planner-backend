@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { FieldConstraints } from 'src/libs/shared';
+import { FieldConstraints } from 'src/libs';
 import { BaseClass } from './base-class.model';
 
 export type UserDocument = UserAccount & Document;

@@ -1,9 +1,9 @@
 export enum EventType {
   CLASSES = 'Zajęcia',
-  MEETING = 'Spotkanie',
-  EXAM = 'Egzamin',
-  QUIZ = 'Kolokwium',
   CLASS_CANCELLATION = 'Odwołanie zajęć',
-  RETAKE = 'Poprawka',
+  EXAM = 'Egzamin',
+  MEETING = 'Spotkanie',
   OTHER = 'Inne',
+  QUIZ = 'Kolokwium',
+  RETAKE = 'Poprawka',
 }

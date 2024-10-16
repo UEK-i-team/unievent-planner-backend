@@ -1,6 +1,6 @@
 import { Exclude, Expose, Transform, Type } from 'class-transformer';
-import { BasicDto } from './basic.dto';
 import { AccountBasicDto } from './account-basic.dto';
+import { BasicDto } from './basic.dto';
 @Exclude()
 export abstract class BaseDto extends BasicDto {
   @Expose()

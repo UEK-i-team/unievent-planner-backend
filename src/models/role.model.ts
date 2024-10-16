@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { FieldConstraints } from 'src/libs';
 import { BaseClass } from './base-class.model';
-import { FieldConstraints } from 'src/libs/shared';
 
 export type RoleDocument = Role & Document;
 

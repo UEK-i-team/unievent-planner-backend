@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Action, Subject, FieldConstraints } from 'src/libs/shared';
+import { Action, FieldConstraints, Subject } from 'src/libs';
 
 export type AppPermissionsDocument = AppPermissions & Document;
 

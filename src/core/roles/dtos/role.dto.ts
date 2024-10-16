@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { IsDefined } from 'class-validator';
-import { Action, BaseDto, Subject, SystemStatus } from 'src/libs/shared';
+import { Action, BaseDto, Subject, SystemStatus } from 'src/libs';
 
 export class PermissionRule {
   @Expose()

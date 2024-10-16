@@ -1,3 +1,3 @@
 export * from './consts';
-export * from './enums';
 export * from './dtos';
+export * from './enums';

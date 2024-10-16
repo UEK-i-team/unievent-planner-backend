@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { EventType } from 'src/libs/shared';
+import { EventType } from 'src/libs';
 import { BaseClass } from './base-class.model';
 
 export type EventDocument = Event & Document;

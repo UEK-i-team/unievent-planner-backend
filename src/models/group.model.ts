@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+import { FieldConstraints, VerificationStatus } from 'src/libs';
 import { BaseClass } from './base-class.model';
-import { FieldConstraints, VerificationStatus } from 'src/libs/shared';
 
 export type GroupDocument = Group & Document;
 
