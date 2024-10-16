@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConnectionString } from './libs';
+import { UpserDefaultsService } from './upser-defaults/upser-defaults.service';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { getMongoConnectionString } from './libs';
     }),
   ],
   controllers: [],
-  providers: [],
+  providers: [UpserDefaultsService],
 })
 export class AppModule {}
