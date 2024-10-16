@@ -1,12 +1,14 @@
-import { Announcement, AnnouncementTarget } from './announcement.model';
+import { Announcement } from './announcement.model';
+import { AppPermissions } from './app-permissions.model';
 import { Event } from './event.model';
 import { Group } from './group.model';
 import { JoinCode } from './join-code.model';
-import { Role, AppPermissions } from './role.model';
+import { Role } from './role.model';
 import { UserAccount } from './user-account.model';
 
 export * from './announcement.model';
-export * from './basic.model';
+export * from './app-permissions.model';
+export * from './base-class.model';
 export * from './event.model';
 export * from './group.model';
 export * from './join-code.model';
@@ -20,13 +22,9 @@ export const MongooseModels = [
     collection: 'announcements',
   },
   {
-    name: AnnouncementTarget.name,
-    schema: AnnouncementTarget,
-    collection: 'announcementTargets',
-  },
-  {
     name: AppPermissions.name,
     schema: AppPermissions,
+    collection: 'appPermissions',
   },
   {
     name: Event.name,

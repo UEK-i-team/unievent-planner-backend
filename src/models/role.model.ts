@@ -1,32 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { BaseClass } from './base.model';
-import { Action, FieldConstraints, Subject } from 'src/libs/shared';
-
-export type AppPermissionsDocument = AppPermissions & Document;
-@Schema()
-export class AppPermissions {
-  @Prop({
-    required: true,
-    lowercase: true,
-    trim: true,
-    enum: Action,
-    maxlength: FieldConstraints.ACTION.MAX_LENGTH,
-  })
-  action!: Action;
-
-  @Prop({
-    required: true,
-    lowercase: true,
-    trim: true,
-    enum: Subject,
-    maxlength: FieldConstraints.SUBJECT.MAX_LENGTH,
-  })
-  subject!: Subject;
-}
-
-export const AppPermissionsSchema =
-  SchemaFactory.createForClass(AppPermissions);
+import { FieldConstraints } from 'src/libs';
+import { BaseClass } from './base-class.model';
 
 export type RoleDocument = Role & Document;
 
@@ -49,11 +24,24 @@ export class Role extends BaseClass {
 
   @Prop({
     required: true,
-    default: [],
-    type: [AppPermissions],
+    type: String,
+    ref: 'User',
+    readonly: true,
     select: false,
   })
-  permissions!: AppPermissions[];
+  createdBy!: string;
+
+  @Prop({ required: true, type: String, ref: 'User' })
+  updatedBy!: string;
+
+  @Prop({
+    required: true,
+    default: [],
+    type: String,
+    ref: 'AppPermissions',
+    select: false,
+  })
+  permissions!: string[];
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);

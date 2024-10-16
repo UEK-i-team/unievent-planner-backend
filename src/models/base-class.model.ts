@@ -2,7 +2,7 @@ import { Prop } from '@nestjs/mongoose';
 import { SystemStatus } from 'src/libs';
 import { v4 as uuid } from 'uuid';
 
-export abstract class BasicClass {
+export abstract class BaseClass {
   @Prop({ default: uuid, readonly: true, select: false })
   _id!: string;
 
