@@ -1,19 +1,8 @@
-import { Optional } from '@nestjs/common';
 import { Expose, Type } from 'class-transformer';
-import {
-  IsArray,
-  IsDefined,
-  IsNotEmpty,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsDefined } from 'class-validator';
 import { GroupDto } from 'src/groups/dtos/group.dto';
-import {
-  AccountBasicDto,
-  FieldConstraints,
-  SystemStatus,
-} from 'src/libs/shared';
-import { PermissionRule, RoleDto } from 'src/roles/dtos/role.dto';
+import { AccountBasicDto, SystemStatus } from 'src/libs/shared';
+import { RoleDto } from 'src/roles/dtos/role.dto';
 
 export class UserAccountDto extends AccountBasicDto {
   get fullName(): string | null {

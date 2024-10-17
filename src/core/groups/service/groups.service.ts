@@ -6,14 +6,16 @@ import {
 } from '@nestjs/common';
 import { CodesService } from 'src/codes/codes.service';
 import { AppRequirements } from 'src/config/app-requirements';
-import { CreateGroupDto } from './dtos/create-group.dto';
+import { CreateGroupDto } from '../../../groups/dtos/create-group.dto';
 import { randomBytes } from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Group } from 'src/models';
 import { Model } from 'mongoose';
+import { plainToClass } from 'class-transformer';
+import { GroupDto } from '../../../groups/dtos/group.dto';
 @Injectable()
 export class GroupsService {
-  @InjectModel(Group.name) private readonly groupModel: Model<Group>;
+  @InjectModel(Group.name) private readonly GroupModel: Model<Group>;
 
   constructor(private readonly codesService: CodesService) {}
 
@@ -24,42 +26,36 @@ export class GroupsService {
       .substring(0, length);
   }
 
-  async createGroup(createGroupDto: CreateGroupDto) {
-    const leaderCode = this.generateCode();
-    const studentCode = this.generateCode();
+  async createGroup(createGroupDto: CreateGroupDto): Promise<CreateGroupDto> {
+    const code = this.generateCode();
 
-    const createGroup = new this.groupModel({
+    const createGroup = new this.GroupModel({
       ...createGroupDto,
-      leaderCode,
-      studentCode,
+      code,
     });
     return createGroup.save();
   }
 
-  async getGroup(@Param('idOrCode') idOrCode: string) {
-    const group = await this.groupModel.findOne({
-      $or: [
-        { _id: idOrCode },
-        { leaderCode: idOrCode },
-        { studentCode: idOrCode },
-      ],
-    });
+  async getGroup(idOrCode: string): Promise<GroupDto | null> {
+    const group = await this.GroupModel.findOne({
+      $or: [{ _id: idOrCode }, { code: idOrCode }],
+    })
+      .lean()
+      .exec();
     if (!group) {
-      throw new NotFoundException(
-        `Group with ID or code ${idOrCode} not found`,
-      );
+      return null;
     }
-    return group;
+    return plainToClass(GroupDto, group);
   }
 
-  async getGroups(): Promise<Group[]> {
-    return this.groupModel.find().exec();
+  async find(): Promise<Group[]> {
+    return this.GroupModel.find().exec();
   }
 
-  async groupExists(code: string): Promise<boolean> {
-    const group = await this.groupModel.findOne({
+  private async groupExists(code: string): Promise<boolean> {
+    const group = await this.GroupModel.findOne({
       $or: [{ leaderCode: code }, { studentCode: code }],
-    });
+    }).exec();
     if (!AppRequirements.validateCode(code)) {
       return false;
     }
@@ -67,8 +63,7 @@ export class GroupsService {
   }
 
   async addStudentToGroup(groupId: string, userId: string): Promise<void> {
-    console.log(` Dodaję użytkownika ${userId} do grupy ${groupId}`);
-    const group = await this.groupModel.findById(groupId);
+    const group = await this.GroupModel.findById(groupId);
     if (!group) {
       throw new NotFoundException(`Group with ID ${groupId} not found`);
     }
@@ -84,9 +79,11 @@ export class GroupsService {
     await group.save();
   }
 
-  async removeStudentFromGroup(groupId: string, userId: string): Promise<void> {
-    console.log(`Usuwam użytkownika ${userId} z grupy ${groupId}`);
-    const group = await this.groupModel.findById(groupId);
+  private async removeStudentFromGroup(
+    groupId: string,
+    userId: string,
+  ): Promise<void> {
+    const group = await this.GroupModel.findById(groupId).exec();
     if (!group) {
       throw new NotFoundException(`Group with ID ${groupId} not found`);
     }
@@ -101,10 +98,10 @@ export class GroupsService {
     await group.save();
   }
 
-  async removeGroup(@Param('idOrCode') idOrCode: string) {
-    const group = await this.groupModel.findOneAndDelete({
-      $or: [{ _id: idOrCode }, { code: idOrCode }, { studentCode: idOrCode }],
-    });
+  async remove(idOrCode: string): Promise<void> {
+    const group = await this.GroupModel.findOneAndDelete({
+      $or: [{ _id: idOrCode }, { code: idOrCode }],
+    }).exec();
 
     if (!group) {
       throw new NotFoundException(

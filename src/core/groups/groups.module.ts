@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { GroupsController } from './groups.controller';
-import { GroupsService } from './groups.service';
-import { CodesService } from '../codes/codes.service';
+import { GroupsController } from './controllers/groups.controller';
+import { GroupsService } from './service/groups.service';
+import { CodesService } from '../../codes/codes.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Group, GroupSchema } from 'src/models';
 

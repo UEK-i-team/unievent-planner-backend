@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConnectionString } from './libs';
-import { GroupsService } from './groups/groups.service';
-import { GroupsController } from './groups/groups.controller';
+import { GroupsService } from './core/groups/service/groups.service';
+import { GroupsController } from './core/groups/controllers/groups.controller';
 import { Group, GroupSchema, UserAccount, UserAccountSchema } from './models';
 
 @Module({
