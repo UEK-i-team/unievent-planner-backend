@@ -1,19 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { FieldConstraints } from 'src/libs/shared';
-import { BasicAccount } from './basic-account.model';
+import { FieldConstraints } from 'src/libs';
+import { BaseClass } from './base.model';
 
 export type UserDocument = UserAccount & Document;
 
 @Schema()
-export class UserAccount extends BasicAccount {
+export class UserAccount extends BaseClass {
   @Prop({
     required: true,
     unique: true,
     trim: true,
     sparse: true,
     maxlength: FieldConstraints.USERNAME.MAX_LENGTH,
-    match: FieldConstraints.USERNAME.PATTERN,
   })
   username!: string;
 
@@ -29,12 +28,14 @@ export class UserAccount extends BasicAccount {
   })
   lastName?: string;
 
-  @Prop({
-    required: true,
-    unique: true,
-    maxlength: FieldConstraints.EMAIL.MAX_LENGTH,
-  })
+  @Prop({ required: false })
+  avatarUrl?: string;
+
+  @Prop({ required: true, unique: true })
   email!: string;
+
+  @Prop({ required: true, default: [], type: [String], ref: 'Role' })
+  role!: string[];
 
   @Prop({ required: true, default: [], type: [String], ref: 'Group' })
   groups!: string[];

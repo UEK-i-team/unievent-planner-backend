@@ -1,46 +1,38 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { FieldConstraints } from 'src/libs';
 import { BaseClass } from './base.model';
-import { AnnouncementTargetType } from 'src/libs/shared';
-
-export type AnnouncementTargetDocument = AnnouncementTarget & Document;
-export class AnnouncementTarget {
-  @Prop({
-    required: true,
-    lowercase: true,
-    trim: true,
-    enum: AnnouncementTargetType,
-  })
-  type!: AnnouncementTargetType;
-
-  @Prop({ default: [], required: true, type: [String], select: false })
-  value!: string[];
-}
-
-export const AnnouncementTargetSchema =
-  SchemaFactory.createForClass(AnnouncementTarget);
 
 export type AnnouncementDocument = Announcement & Document;
 
 @Schema()
 export class Announcement extends BaseClass {
-  @Prop({ required: true })
+  @Prop({
+    required: true,
+    trim: true,
+    maxlength: FieldConstraints.TITLE.MAX_LENGTH,
+  })
   title!: string;
 
-  @Prop({ required: true })
-  content!: string;
+  @Prop({
+    required: true,
+    trim: true,
+    maxlength: FieldConstraints.DESCRIPTION.MAX_LENGTH,
+  })
+  description!: string;
 
-  @Prop({ required: true })
-  startDate!: Date;
+  // TODO implement later, when permissions are WORKING
+  // @Prop({ required: true, enum: AnnouncementTargetType })
+  // targetType!: AnnouncementTargetType;
 
-  @Prop({ required: true })
-  endDate!: Date;
+  // @Prop({ required: false, type: [String], select: false })
+  // targetValue?: string[];
 
-  @Prop({ required: true })
-  target: AnnouncementTarget;
-
-  @Prop({ required: false })
+  @Prop({ required: false, select: false })
   expiresAt?: Date;
+
+  @Prop({ required: true })
+  important!: boolean;
 }
 
 export const AnnouncementSchema = SchemaFactory.createForClass(Announcement);

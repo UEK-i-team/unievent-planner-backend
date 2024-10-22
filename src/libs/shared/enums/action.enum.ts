@@ -1,6 +1,6 @@
 export enum Action {
-  MANAGE = 'Manage',
   DELETE = 'Delete',
-  UPDATE = 'Update',
   DISPLAY = 'Display',
+  MANAGE = 'Manage',
+  UPDATE = 'Update',
 }

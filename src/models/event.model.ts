@@ -1,16 +1,24 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { EventType } from 'src/libs/shared';
+import { EventType, FieldConstraints } from 'src/libs';
 import { BaseClass } from './base.model';
 
 export type EventDocument = Event & Document;
 
 @Schema()
 export class Event extends BaseClass {
-  @Prop({ required: true })
+  @Prop({
+    required: true,
+    trim: true,
+    maxlength: FieldConstraints.TITLE.MAX_LENGTH,
+  })
   title!: string;
 
-  @Prop({ required: true })
+  @Prop({
+    required: true,
+    trim: true,
+    maxlength: FieldConstraints.DESCRIPTION.MAX_LENGTH,
+  })
   description!: string;
 
   @Prop({ required: true })
@@ -20,8 +28,8 @@ export class Event extends BaseClass {
   endDate!: Date;
 
   @Prop({
-    default: [],
     required: true,
+    default: [],
     type: [String],
     ref: 'Group',
     select: false,
@@ -30,9 +38,6 @@ export class Event extends BaseClass {
 
   @Prop({ required: true, enum: EventType })
   type!: EventType;
-
-  @Prop({ required: true, type: String, ref: 'Role' })
-  role!: string;
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
