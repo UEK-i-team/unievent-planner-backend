@@ -1,56 +1,45 @@
-import { Announcement, AnnouncementTarget } from './announcement.model';
-import { Event } from './event.model';
-import { Group } from './group.model';
-import { JoinCode } from './join-code.model';
-import { Role, AppPermissions } from './role.model';
-import { UserAccount } from './user-account.model';
-
-export * from './announcement.model';
-export * from './basic.model';
-export * from './event.model';
-export * from './group.model';
-export * from './join-code.model';
-export * from './role.model';
-export * from './user-account.model';
+import { Announcement, AnnouncementSchema } from './announcement.model';
+import { AppPermissions, AppPermissionsSchema } from './app-permissions.model';
+import { Event, EventSchema } from './event.model';
+import { Group, GroupSchema } from './group.model';
+import { JoinCode, JoinCodeSchema } from './join-code.model';
+import { Role, RoleSchema } from './role.model';
+import { UserAccount, UserAccountSchema } from './user-account.model';
 
 export const MongooseModels = [
   {
     name: Announcement.name,
-    schema: Announcement,
+    schema: AnnouncementSchema,
     collection: 'announcements',
   },
   {
-    name: AnnouncementTarget.name,
-    schema: AnnouncementTarget,
-    collection: 'announcementTargets',
-  },
-  {
     name: AppPermissions.name,
-    schema: AppPermissions,
+    schema: AppPermissionsSchema,
+    collection: 'appPermissions',
   },
   {
     name: Event.name,
-    schema: Event,
+    schema: EventSchema,
     collection: 'events',
   },
   {
     name: Group.name,
-    schema: Group,
+    schema: GroupSchema,
     collection: 'groups',
   },
   {
     name: JoinCode.name,
-    schema: JoinCode,
+    schema: JoinCodeSchema,
     collection: 'joinCodes',
   },
   {
     name: Role.name,
-    schema: Role,
+    schema: RoleSchema,
     collection: 'roles',
   },
   {
     name: UserAccount.name,
-    schema: UserAccount,
+    schema: UserAccountSchema,
     collection: 'userAccounts',
   },
 ];

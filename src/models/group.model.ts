@@ -1,8 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
+import { FieldConstraints, VerificationStatus } from 'src/libs';
 import { BaseClass } from './base.model';
-import { FieldConstraints, VerificationStatus } from 'src/libs/shared';
 
 export type GroupDocument = Group & Document;
 
@@ -25,10 +25,14 @@ export class Group extends BaseClass {
   @Prop({ required: true })
   avatarUrl!: string;
 
-  @Prop({ required: false })
+  @Prop({ required: false, trim: true })
   courseName?: string;
 
-  @Prop({ required: false })
+  @Prop({
+    required: false,
+    trim: true,
+    maxlength: FieldConstraints.DESCRIPTION.MAX_LENGTH,
+  }) // Optional description
   description?: string;
 
   @Prop({
@@ -38,26 +42,26 @@ export class Group extends BaseClass {
   })
   verificationStatus!: VerificationStatus;
 
-  @Prop({ required: false })
+  @Prop({ required: false, trim: true })
   rejectionReason?: string;
 
-  @Prop({ required: true, type: String, ref: 'UserAccount' })
+  @Prop({ required: true, type: String, ref: 'User' })
   president!: string;
 
   @Prop({
-    default: [],
     required: true,
+    default: [],
     type: [String],
     select: false,
     ref: 'JoinCode',
   })
-  codes!: string[];
+  joinCodes!: string[];
 
   @Prop({
     required: true,
     default: [],
     type: [String],
-    ref: 'UserAccount',
+    ref: 'User',
     select: false,
   })
   members!: string[];

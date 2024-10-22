@@ -1,9 +1,9 @@
 import { Prop } from '@nestjs/mongoose';
 import { SystemStatus } from 'src/libs';
-import * as uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
-export abstract class BasicClass {
-  @Prop({ default: () => uuid.v4(), readonly: true, select: false })
+export abstract class BaseClass {
+  @Prop({ default: uuid, readonly: true, select: false })
   _id!: string;
 
   get id(): string {

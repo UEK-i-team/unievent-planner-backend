@@ -1,9 +1,9 @@
 export enum Subject {
-  ROLES = 'Roles',
-  GROUPS = 'Groups',
-  EVENTS = 'Events',
   ACCOUNTS = 'Accounts',
-  ANNOUNCEMENTS = 'Announcements',
-  JOIN_CODES = 'JoinCodes',
   ALL = 'All',
+  ANNOUNCEMENTS = 'Announcements',
+  EVENTS = 'Events',
+  GROUPS = 'Groups',
+  JOIN_CODES = 'JoinCodes',
+  ROLES = 'Roles',
 }
