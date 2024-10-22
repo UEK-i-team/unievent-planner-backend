@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
-import { getMongoConnectionString } from './libs';
+import { getMongoConnectionString, PermissionGuard } from './libs';
 import { MongooseModels } from './models';
 
 @Module({
@@ -20,6 +21,11 @@ import { MongooseModels } from './models';
     MongooseModule.forFeature(MongooseModels),
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
+  ],
 })
 export class AppModule {}
