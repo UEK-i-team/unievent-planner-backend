@@ -4,6 +4,9 @@ import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoConnectionString, PermissionGuard } from './libs';
 import { MongooseModels } from './models';
+import { GroupsController } from './core/groups/controllers';
+import { GroupsService } from './core/groups/service';
+import { GroupsModule } from './core/groups/groups.module';
 
 @Module({
   imports: [
@@ -19,13 +22,14 @@ import { MongooseModels } from './models';
       }),
     }),
     MongooseModule.forFeature(MongooseModels),
+    GroupsModule,
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: PermissionGuard,
+    // },
   ],
 })
 export class AppModule {}

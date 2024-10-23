@@ -9,9 +9,6 @@ export class JoinCodeDto extends BaseDto {
   name!: string;
 
   @Expose()
-  code!: string;
-
-  @Expose()
   @Type(() => RoleDto)
   role!: RoleDto;
 

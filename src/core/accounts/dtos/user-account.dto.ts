@@ -1,6 +1,5 @@
 import { Expose, Type } from 'class-transformer';
 import { IsDefined } from 'class-validator';
-//TODO change to better imports, move all dtos to different folder or sth
 import { GroupDto } from 'src/core/groups/dtos';
 import { RoleDto } from 'src/core/roles/dtos';
 import { AccountBasicDto, SystemStatus } from 'src/libs';

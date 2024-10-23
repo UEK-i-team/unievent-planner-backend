@@ -10,13 +10,6 @@ export type GroupDocument = Group & Document;
 export class Group extends BaseClass {
   @Prop({
     required: true,
-    lowercase: true,
-    match: FieldConstraints.CODE.PATTERN,
-  })
-  code!: string;
-
-  @Prop({
-    required: true,
     trim: true,
     maxlength: FieldConstraints.NAME.MAX_LENGTH,
   })

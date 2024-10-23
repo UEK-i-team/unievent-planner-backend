@@ -9,14 +9,6 @@ export type RoleDocument = Role & Document;
 export class Role extends BaseClass {
   @Prop({
     required: true,
-    lowercase: true,
-    maxlength: FieldConstraints.CODE.MAX_LENGTH,
-    match: FieldConstraints.CODE.PATTERN,
-  })
-  code!: string;
-
-  @Prop({
-    required: true,
     trim: true,
     maxlength: FieldConstraints.NAME.MAX_LENGTH,
   })
