@@ -7,7 +7,7 @@ export abstract class BaseClass extends BasicClass {
     type: String,
     ref: 'BasicAccount',
     readonly: true,
-    select: false,
+    // select: false,
   })
   createdBy?: string;
 
