@@ -2,6 +2,25 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { EventType, FieldConstraints } from '../libs';
 import { BaseClass } from './base.model';
+import { EventTypeColor } from 'src/libs/shared/enums/event-type-color.enum';
+
+export type EventDocument = Event & Document;
+
+export class EventTypeColorModel {
+  @Prop({
+    default: EventTypeColor.OTHER,
+    required: true,
+    enum: EventTypeColor,
+  })
+  color!: EventTypeColor;
+
+  @Prop({
+    default: EventType.OTHER,
+    required: true,
+    enum: EventType,
+  })
+  type!: EventType;
+}
 
 @Schema()
 export class Event extends BaseClass {
@@ -34,8 +53,8 @@ export class Event extends BaseClass {
   })
   groups!: string[];
 
-  @Prop({ required: true, enum: EventType })
-  type!: EventType;
+  @Prop({ required: true, type: EventTypeColorModel })
+  typeModel!: EventTypeColorModel;
 }
 
 export const EventSchema = SchemaFactory.createForClass(Event);
