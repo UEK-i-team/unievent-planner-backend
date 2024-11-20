@@ -5,6 +5,12 @@ import { HttpExceptionFilter } from './libs';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: process.env.CORS_ORIGIN || '*',
+    methods: process.env.CORS_METHODS || 'GET,POST,PUT,DELETE,OPTIONS',
+    allowedHeaders: process.env.CORS_HEADERS || 'Content-Type,Authorization',
+    credentials: process.env.CORS_CREDENTIALS === 'true',
+  });
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api/v1');
   app.useGlobalFilters(new HttpExceptionFilter());
