@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import mongoose from 'mongoose';
 import { FieldConstraints, VerificationStatus } from '../libs';
 import { BaseClass } from './base.model';
 
@@ -36,11 +35,7 @@ export class Group extends BaseClass {
   @Prop({ required: false, trim: true })
   rejectionReason?: string;
 
-  @Prop({
-    required: true,
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'UserAccount',
-  })
+  @Prop({ required: true, type: String, ref: 'BasicAccount' })
   president!: string;
 
   @Prop({
@@ -55,8 +50,8 @@ export class Group extends BaseClass {
   @Prop({
     required: true,
     default: [],
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'UserAccount',
+    type: [String],
+    ref: 'BasicAccount',
     select: false,
   })
   members!: string[];

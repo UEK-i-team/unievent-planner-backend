@@ -1,8 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Action, FieldConstraints, Subject } from '../libs';
+import { FieldConstraints } from '../libs';
+import { Action, Subject } from '../libs';
 import { BaseClass } from './base.model';
 
-export class PermissionRule {
+@Schema()
+export class Role extends BaseClass {
   @Prop({
     required: true,
     trim: true,
