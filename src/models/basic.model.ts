@@ -3,8 +3,6 @@ import { SystemStatus } from '../libs';
 import { SystemStatus } from '../libs';
 
 export abstract class BasicClass {
-  _id!: string;
-
   @Prop({ required: true, default: SystemStatus.ACTIVE, enum: SystemStatus })
   status!: SystemStatus;
 
