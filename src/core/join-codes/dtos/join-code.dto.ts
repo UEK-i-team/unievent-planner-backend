@@ -1,8 +1,8 @@
 import { Expose, Type } from 'class-transformer';
 import { IsDefined } from 'class-validator';
 import { BaseDto, SystemStatus } from '../../../libs';
-import { GroupDto } from '../../groups/dtos/group.dto';
-import { RoleDto } from '../../roles/dtos/role.dto';
+import { GroupDto } from '../../groups/dtos';
+import { RoleDto } from '../../roles/dtos';
 
 export class JoinCodeDto extends BaseDto {
   @Expose()

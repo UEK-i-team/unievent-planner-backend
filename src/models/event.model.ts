@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
 import { EventType, FieldConstraints } from '../libs';
 import { BaseClass } from './base.model';
 
