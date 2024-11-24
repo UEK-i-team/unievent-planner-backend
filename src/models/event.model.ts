@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { EventType, FieldConstraints } from '../libs';
 import { BaseClass } from './base.model';
 import { EventTypeColor } from '../libs';
@@ -50,7 +51,7 @@ export class Event extends BaseClass {
     ref: 'Group',
     select: false,
   })
-  groups!: string[];
+  groups!: mongoose.Types.ObjectId[];
 
   @Prop({ required: true, type: EventTypeColorModel })
   typeModel!: EventTypeColorModel;
