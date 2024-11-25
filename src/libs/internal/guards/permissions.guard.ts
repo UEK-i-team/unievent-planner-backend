@@ -10,7 +10,7 @@ import {
   PERMISSION_KEY,
   RequiredPermissions,
   Subject,
-} from 'src/libs/shared';
+} from '../../shared';
 @Injectable()
 export class PermissionGuard implements CanActivate {
   constructor(private reflector: Reflector) {}

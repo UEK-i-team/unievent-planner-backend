@@ -1,5 +1,8 @@
-export * from './consts';
-export * from './dtos';
+/**
+ * Order of exports is important for proper functionality.
+ */
 export * from './enums';
-export * from './decorators';
 export * from './types';
+export * from './consts';
+export * from './decorators';
+export * from './dtos';

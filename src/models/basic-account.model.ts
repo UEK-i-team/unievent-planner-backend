@@ -1,4 +1,5 @@
 import { Prop } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { BasicClass } from './basic.model';
 
 export abstract class BasicAccount extends BasicClass {
@@ -11,18 +12,27 @@ export abstract class BasicAccount extends BasicClass {
   @Prop({ required: false })
   avatarUrl?: string;
 
-  @Prop({ required: true, default: [], type: [String], ref: 'Role' })
-  roles!: string[];
+  @Prop({
+    required: true,
+    default: [],
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Role',
+  })
+  roles!: mongoose.Types.ObjectId[];
 
   @Prop({
     required: true,
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'BasicAccount',
     readonly: true,
     select: false,
   })
-  createdBy?: string;
+  createdBy?: mongoose.Types.ObjectId;
 
-  @Prop({ required: true, type: String, ref: 'BasicAccount' })
-  updatedBy!: string;
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'BasicAccount',
+  })
+  updatedBy!: mongoose.Types.ObjectId;
 }

@@ -1,5 +1,5 @@
+import { ModelDefinition } from '@nestjs/mongoose';
 import { Announcement, AnnouncementSchema } from './announcement.model';
-import { AppPermissions, AppPermissionsSchema } from './app-permissions.model';
 import { Event, EventSchema } from './event.model';
 import { Group, GroupSchema } from './group.model';
 import { JoinCode, JoinCodeSchema } from './join-code.model';
@@ -9,16 +9,18 @@ import { UserAccount, UserAccountSchema } from './user-account.model';
 
 export * from './system-log.model';
 
-export const MongooseModels = [
+export * from './announcement.model';
+export * from './event.model';
+export * from './group.model';
+export * from './join-code.model';
+export * from './role.model';
+export * from './user-account.model';
+
+export const MongooseModels: ModelDefinition[] = [
   {
     name: Announcement.name,
     schema: AnnouncementSchema,
     collection: 'announcements',
-  },
-  {
-    name: AppPermissions.name,
-    schema: AppPermissionsSchema,
-    collection: 'appPermissions',
   },
   {
     name: Event.name,

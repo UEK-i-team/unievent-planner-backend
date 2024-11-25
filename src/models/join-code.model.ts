@@ -1,16 +1,14 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import mongoose from 'mongoose';
 import { BaseClass } from './base.model';
-
-export type JoinCodeDocument = JoinCode & Document;
 
 @Schema()
 export class JoinCode extends BaseClass {
   @Prop({ required: true, type: String, ref: 'Role' })
   role!: string;
 
-  @Prop({ required: true, type: String, ref: 'Group' })
-  group!: string;
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Group' })
+  group!: mongoose.Types.ObjectId;
 
   //how many times code was used
   @Prop({ required: true, default: 0, select: false })

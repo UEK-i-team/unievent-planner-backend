@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { BaseDto, type EventType } from 'src/libs';
+import { BaseDto, type EventType } from '../../../libs';
 
 export class EventDto extends BaseDto {
   @Expose()

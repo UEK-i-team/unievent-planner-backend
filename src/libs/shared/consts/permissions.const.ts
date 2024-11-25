@@ -1,4 +1,5 @@
-import { Subject, Action } from 'src/libs/shared';
+import { Action } from '../enums/action.enum';
+import { Subject } from '../enums/subject.enum';
 
 export class AppPermissions {
   static readonly ADMIN = {

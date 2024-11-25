@@ -1,20 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
 
-import { FieldConstraints, VerificationStatus } from 'src/libs';
+import mongoose from 'mongoose';
+import { FieldConstraints, VerificationStatus } from '../libs';
 import { BaseClass } from './base.model';
-
-export type GroupDocument = Group & Document;
 
 @Schema()
 export class Group extends BaseClass {
-  @Prop({
-    required: true,
-    lowercase: true,
-    match: FieldConstraints.CODE.PATTERN,
-  })
-  code!: string;
-
   @Prop({
     required: true,
     trim: true,
@@ -45,26 +36,30 @@ export class Group extends BaseClass {
   @Prop({ required: false, trim: true })
   rejectionReason?: string;
 
-  @Prop({ required: true, type: String, ref: 'User' })
-  president!: string;
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'BasicAccount',
+  })
+  president!: mongoose.Types.ObjectId;
 
   @Prop({
     required: true,
     default: [],
-    type: [String],
+    type: [mongoose.Schema.Types.ObjectId],
     select: false,
     ref: 'JoinCode',
   })
-  joinCodes!: string[];
+  joinCodes!: mongoose.Types.ObjectId[];
 
   @Prop({
     required: true,
     default: [],
-    type: [String],
-    ref: 'User',
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'BasicAccount',
     select: false,
   })
-  members!: string[];
+  members!: mongoose.Types.ObjectId[];
 }
 
 export const GroupSchema = SchemaFactory.createForClass(Group);

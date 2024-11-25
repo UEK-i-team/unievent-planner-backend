@@ -1,7 +1,7 @@
 import { Optional } from '@nestjs/common';
 import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
-import { FieldConstraints } from 'src/libs';
+import { FieldConstraints } from '../../../libs';
 
 export class CreateGroupDto {
   @Expose()
