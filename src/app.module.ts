@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -28,6 +28,7 @@ import { UpserDefaultsService } from './upser-defaults/upser-defaults.service';
       useClass: PermissionGuard,
     },
     UpserDefaultsService,
+    Logger,
   ],
 })
 export class AppModule {}
