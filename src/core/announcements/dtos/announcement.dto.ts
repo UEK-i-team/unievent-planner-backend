@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { BaseDto } from 'src/libs';
+import { BaseDto } from '../../../libs';
 
 export class AnnouncementDto extends BaseDto {
   @Expose()

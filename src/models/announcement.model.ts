@@ -1,9 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { FieldConstraints } from 'src/libs';
+import { FieldConstraints } from '../libs';
 import { BaseClass } from './base.model';
-
-export type AnnouncementDocument = Announcement & Document;
 
 @Schema()
 export class Announcement extends BaseClass {
