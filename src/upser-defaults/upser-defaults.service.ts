@@ -65,8 +65,8 @@ export class UpserDefaultsService implements OnModuleInit {
         systemAccount.username = username;
         systemAccount.updatedAt = new Date();
         systemAccount.createdAt = new Date();
-        systemAccount.updatedBy = systemAccount._id;
-        systemAccount.createdBy = systemAccount._id;
+        systemAccount.updatedBy = systemAccount.id;
+        systemAccount.createdBy = systemAccount.id;
         systemAccount.email = 'system@unievent-planner.com';
         await systemAccount.save();
       }
