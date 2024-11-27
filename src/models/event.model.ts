@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { EventType, FieldConstraints } from '../libs';
 import { BaseClass } from './base.model';
-import { EventTypeColor } from '../libs/shared/enums/event-type-color.enum';
+import { EventTypeColor } from '../libs';
 
 export type EventDocument = Event & Document;
 
