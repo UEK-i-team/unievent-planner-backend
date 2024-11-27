@@ -1,9 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { EventType, FieldConstraints } from 'src/libs';
+import mongoose from 'mongoose';
+import { EventType, FieldConstraints } from '../libs';
 import { BaseClass } from './base.model';
-
-export type EventDocument = Event & Document;
 
 @Schema()
 export class Event extends BaseClass {
@@ -30,7 +28,7 @@ export class Event extends BaseClass {
   @Prop({
     required: true,
     default: [],
-    type: [String],
+    type: [mongoose.Schema.Types.ObjectId],
     ref: 'Group',
     select: false,
   })
