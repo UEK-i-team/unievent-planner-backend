@@ -40,10 +40,13 @@ export class GroupsController {
   }
 
   @Post('join')
-  joinGroup(@Body() userAccount: UserAccountDto): Promise<void> {
+  joinGroup(
+    @Body() userAccount: UserAccountDto,
+    GroupDto: GroupDto,
+  ): Promise<void> {
     return this.codeService.joinGroup(
-      '647c5917-2ed2-4e9d-85e9-ac596e0248e2',
-      userAccount.id,
+      (GroupDto.id = '996e998f-129e-4a9f-a366-f661f5048264'),
+      (userAccount.id = '647c5917-2ed2-4e9d-85e9-ac596e0248e2'),
     );
   }
 
