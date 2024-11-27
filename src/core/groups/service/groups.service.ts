@@ -13,16 +13,10 @@ import { Group } from 'src/models';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { GroupDto } from '../dtos/group.dto';
+import { UserAccountDto } from 'src/core/accounts/dtos';
 @Injectable()
 export class GroupsService {
   @InjectModel(Group.name) private readonly GroupModel: Model<Group>;
-
-  // private generateCode(length: number = 6): string {
-  //   return randomBytes(length)
-  //     .toString('base64')
-  //     .replace(/[^a-zA-Z0-9]/g, '')
-  //     .substring(0, length);
-  // }
 
   async createGroup(createGroupDto: CreateGroupDto): Promise<CreateGroupDto> {
     const createGroupDoc = new this.GroupModel();
@@ -30,15 +24,15 @@ export class GroupsService {
     createGroupDoc.president = '647c5917-2ed2-4e9d-85e9-ac596e0248e2';
     createGroupDoc.updatedAt = new Date();
     createGroupDoc.createdAt = new Date();
-    createGroupDoc.updatedBy = '647c5917-2ed2-4e9d-85e9-ac596e0248e2';
-    createGroupDoc.createdBy = '647c5917-2ed2-4e9d-85e9-ac596e0248e2';
+    // createGroupDoc.updatedBy = '647c5917-2ed2-4e9d-85e9-ac596e0248e2';
+    // createGroupDoc.createdBy = '647c5917-2ed2-4e9d-85e9-ac596e0248e2';
     //
     createGroupDoc.name = createGroupDto.name;
     createGroupDoc.courseName = createGroupDto.courseName;
     createGroupDoc.description = createGroupDto.description;
     createGroupDoc.avatarUrl = createGroupDto.avatarUrl;
-    // todo: change it
-    createGroupDoc.joinCodes = ['d656f6b5-e852-4387-967a-02ead4b5b009'];
+    // todo: dodac generowanie join code
+    createGroupDoc.joinCodes = [];
     //
     return createGroupDoc.save();
   }
@@ -47,11 +41,14 @@ export class GroupsService {
     const group = await this.GroupModel.findOne({
       $or: [{ _id: idOrCode }, { code: idOrCode }],
     })
+      .populate('members')
       .lean()
       .exec();
+    console.log('Members:', group.members);
     if (!group) {
       return null;
     }
+    console.log(group);
     return plainToClass(GroupDto, group);
   }
 
@@ -91,36 +88,36 @@ export class GroupsService {
   //   }
   // }
 
-  async addStudentToGroup(groupId: string, userId: string): Promise<void> {
-    const group = await this.GroupModel.findById(groupId);
-    if (!group) {
-      throw new NotFoundException(`Group with ID ${groupId} not found`);
-    }
-    if (!group.members.includes(userId)) {
-      throw new BadRequestException(
-        `User ${userId} is already a member of group ${groupId}`,
-      );
-    }
+  // async addStudentToGroup(groupId: string, userId: string): Promise<void> {
+  //   const group = await this.GroupModel.findById(groupId);
+  //   if (!group) {
+  //     throw new NotFoundException(`Group with ID ${groupId} not found`);
+  //   }
+  //   if (!group.members.includes(userId)) {
+  //     throw new BadRequestException(
+  //       `User ${userId} is already a member of group ${groupId}`,
+  //     );
+  //   }
 
-    group.members.push(userId);
-    await group.save();
-  }
+  //   group.members.push(userId);
+  //   await group.save();
+  // }
 
-  async removeStudentFromGroup(groupId: string, userId: string): Promise<void> {
-    const group = await this.GroupModel.findById(groupId).exec();
-    if (!group) {
-      throw new NotFoundException(`Group with ID ${groupId} not found`);
-    }
+  // async removeStudentFromGroup(groupId: string, userId: string): Promise<void> {
+  //   const group = await this.GroupModel.findById(groupId).exec();
+  //   if (!group) {
+  //     throw new NotFoundException(`Group with ID ${groupId} not found`);
+  //   }
 
-    if (!group.members.includes(userId)) {
-      throw new BadRequestException(
-        `User ${userId} is not a member of group ${groupId}`,
-      );
-    }
+  //   if (!group.members.includes(userId)) {
+  //     throw new BadRequestException(
+  //       `User ${userId} is not a member of group ${groupId}`,
+  //     );
+  //   }
 
-    group.members = group.members.filter((studentId) => studentId !== userId);
-    await group.save();
-  }
+  //   group.members = group.members.filter((studentId) => studentId !== userId);
+  //   await group.save();
+  // }
 
   async remove(idOrCode: string): Promise<void> {
     const group = await this.GroupModel.findOneAndDelete({

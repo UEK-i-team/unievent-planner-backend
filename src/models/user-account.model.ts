@@ -1,8 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose from 'mongoose';
-import mongoose from 'mongoose';
-import { FieldConstraints } from '../libs';
+import { FieldConstraints } from 'src/libs';
 import { BaseClass } from './base.model';
+import mongoose from 'mongoose';
 
 @Schema()
 export class UserAccount extends BaseClass {
