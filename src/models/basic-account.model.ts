@@ -1,6 +1,5 @@
 import { Prop } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import mongoose from 'mongoose';
 import { BasicClass } from './basic.model';
 
 export abstract class BasicAccount extends BasicClass {

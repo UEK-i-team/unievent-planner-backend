@@ -1,6 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-
 import { FieldConstraints, VerificationStatus } from '../libs';
 import { BaseClass } from './base.model';
 import { UserAccount, UserAccountSchema } from './user-account.model';

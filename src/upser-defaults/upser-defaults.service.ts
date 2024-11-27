@@ -1,5 +1,4 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-<<<<<<< HEAD
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Connection, HydratedDocument, Model } from 'mongoose';

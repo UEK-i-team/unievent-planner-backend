@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { FieldConstraints } from 'src/libs';
+import { Action, FieldConstraints, Subject } from 'src/libs';
 import { BaseClass } from './base.model';
 
 export class PermissionRule {
