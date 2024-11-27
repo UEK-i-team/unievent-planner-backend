@@ -1,6 +1,5 @@
 import { Expose } from 'class-transformer';
-import { EventTypeColor } from 'src/libs/shared/enums/event-type-color.enum';
-import { EventType } from 'src/libs/shared/enums/event-type.enum';
+import { EventType, EventTypeColor } from '../../../libs/';
 
 export class EventTypeDto {
   @Expose()
