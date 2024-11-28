@@ -3,8 +3,6 @@ import {
   Post,
   Body,
   Delete,
-  HttpException,
-  HttpStatus,
   HttpCode,
   Param,
   Get,
@@ -23,15 +21,15 @@ export class GroupsController {
     private readonly codeService: codeService,
   ) {}
 
-  @Get(':idOrCode')
-  async getGroup(@Param('idOrCode') idOrCode: string): Promise<GroupDto> {
-    return this.groupsService.getGroup(idOrCode);
+  @Get(':id')
+  async getGroup(@Param('id') id: string): Promise<GroupDto> {
+    return this.groupsService.getGroup(id);
   }
 
-  // @Get()
-  // async find() {
-  //   return this.groupsService.find();
-  // }
+  @Get()
+  async find() {
+    return this.groupsService.find();
+  }
 
   @Post()
   @HttpCode(201)
@@ -67,7 +65,7 @@ export class GroupsController {
   // }
 
   @Delete(':idOrCode')
-  remove(@Param('idOrCode') idOrCode: string): Promise<void> {
-    return this.groupsService.remove(idOrCode);
+  remove(@Param('idOrCode') id: string): Promise<{ statusCode: number }> {
+    return this.groupsService.remove(id);
   }
 }
