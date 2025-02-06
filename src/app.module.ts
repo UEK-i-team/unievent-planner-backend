@@ -1,7 +1,7 @@
 import { Module, Logger } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
-import { RolesGuard } from './auth/roles.guard';
+import { PermissionsGuard } from './libs/internal/guards/permissions.guard';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -34,7 +34,7 @@ import { UpserDefaultsService } from './upser-defaults/upser-defaults.service';
     },
     {
       provide: APP_GUARD,
-      useClass: RolesGuard,
+      useClass: PermissionsGuard,
     },
     UpserDefaultsService,
     Logger,

@@ -5,6 +5,8 @@ import { FirebaseService } from './firebase.service';
 import { UserAccount } from 'src/models';
 import { AccountsService } from 'src/core/accounts/services/accounts.service';
 import { CreateUserAccountDto, UserAccountDto } from 'src/core/accounts/dtos';
+import { Request } from 'express';
+import { uniqWith, isEqual } from 'lodash';
 
 @Injectable()
 export class AuthService {
@@ -12,9 +14,9 @@ export class AuthService {
     @InjectModel(UserAccount.name) private userModel: Model<UserAccount>,
     private firebaseService: FirebaseService,
     private accountsService: AccountsService,
-  ) {}
+  ) { }
 
-  async verifyToken(token: string): Promise<UserAccountDto> {
+  async verifyToken(token: string, request: Request): Promise<UserAccountDto> {
     try {
       const decodedToken = await this.firebaseService.verifyGoogleToken(token);
       let user = await this.accountsService.findByEmail(decodedToken.email);
@@ -30,6 +32,18 @@ export class AuthService {
           throw new UnauthorizedException('Error adding new user');
         }
       }
+
+      const permissionsArray = uniqWith(
+        user.role.reduce((acc, role) => {
+          return acc.concat(role.permissions);
+        }, []),
+        isEqual,
+      );
+      request.session.user = {
+        id: user.id,
+        email: user.email,
+        permissions: permissionsArray,
+      };
       return user;
     } catch (error) {
       throw new UnauthorizedException(error);

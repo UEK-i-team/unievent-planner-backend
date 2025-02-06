@@ -18,7 +18,7 @@ export class AccountsService {
     createUserAccountDto: CreateUserAccountDto,
   ): Promise<UserAccountDto> {
     const systemUser = (await this.upserDefaultsService.getSystemAccount()).id;
-    const userRole = (await this.upserDefaultsService.getUserRole()).id;
+    const studentRole = (await this.upserDefaultsService.getStudentRole()).id;
     const createUserAccountDoc = new this.userAccountModel();
 
     createUserAccountDoc.firebaseId = createUserAccountDto.firebaseId;
@@ -27,7 +27,7 @@ export class AccountsService {
     createUserAccountDoc.firstName = createUserAccountDto.firstName;
     createUserAccountDoc.lastName = createUserAccountDto.lastName;
     createUserAccountDoc.groups = [];
-    createUserAccountDoc.role = [userRole];
+    createUserAccountDoc.role = [studentRole];
     createUserAccountDoc.createdBy = systemUser;
     createUserAccountDoc.updatedBy = systemUser;
 

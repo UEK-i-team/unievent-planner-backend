@@ -1,20 +1,17 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AuthGuard } from './auth/auth.guard';
-import { RolesGuard } from './auth/roles.guard';
-import { Roles } from './libs/shared/decorators/roles.decorator';
+import { Controller, Get } from '@nestjs/common';
+import { AppPermissions } from './libs';
+import { Permissions } from './libs/shared/decorators/permissions.decorator';
 
 @Controller()
 export class AppController {
   @Get('admin-route')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles('SYSTEM')
+  @Permissions(AppPermissions.ADMIN)
   getAdminRoute(): string {
     return 'This is an admin route';
   }
 
   @Get('user-route')
-  @UseGuards(AuthGuard, RolesGuard)
-  @Roles('USER')
+  @Permissions(AppPermissions.EVENTS.DISPLAY)
   getUserRoute(): string {
     return 'This is a user route';
   }

@@ -13,14 +13,14 @@ import {
   Subject,
 } from '../../shared';
 @Injectable()
-export class PermissionGuard implements CanActivate {
+export class PermissionsGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   matchRoles(
     requiredPermissions: RequiredPermissions[],
     sessionPermissions: RequiredPermissions[],
   ): boolean {
-    if (!sessionPermissions || !sessionPermissions.length) {
+if (!sessionPermissions || !sessionPermissions.length) {
       throw new ForbiddenException('Invalid permissions');
     }
     const isAdmin = sessionPermissions.some(
@@ -53,11 +53,11 @@ export class PermissionGuard implements CanActivate {
         context.getClass(),
       );
     if (!requiredPermissions || !requiredPermissions.length) {
-      // console.log('not having permissoins in user');
-      throw new ForbiddenException('Invalid permissions');
+      return true;
     }
     const request = context.switchToHttp().getRequest();
     const session = request.session;
-    return this.matchRoles(requiredPermissions, session.permissions);
+    console.log('session', session);
+    return this.matchRoles(requiredPermissions, session.user.permissions||[]);
   }
 }

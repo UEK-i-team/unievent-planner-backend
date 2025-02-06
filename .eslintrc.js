@@ -10,12 +10,14 @@ module.exports = {
     '@typescript-eslint',
     'prefer-arrow',
     'unicorn',
+    'prettier'
   ],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'eslint:recommended',
     'plugin:n/recommended',
+    'prettier',
   ],
   root: true,
   env: {
@@ -24,6 +26,7 @@ module.exports = {
   },
   ignorePatterns: ['.eslintrc.js'],
   rules: {
+    'prettier/prettier': 'error',
     'no-use-before-define': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
     'no-eval': 'error',
