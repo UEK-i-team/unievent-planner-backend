@@ -7,18 +7,17 @@ import {
   Param,
   Get,
 } from '@nestjs/common';
-import { codeService } from 'src/core/join-codes/service/code.service';
+import { CodeService } from 'src/core/join-codes/service/code.service';
 import { GroupsService } from '../service/groups.service';
 import { CreateGroupDto } from '../dtos/create-group.dto';
 import { GroupDto } from '../dtos/group.dto';
-import { UserAccountDto } from 'src/core/accounts/dtos';
-import { UserAccount } from 'src/models';
+import { JoinCodeDto } from 'src/core/join-codes/dtos';
 
 @Controller('groups')
 export class GroupsController {
   constructor(
     private readonly groupsService: GroupsService,
-    private readonly codeService: codeService,
+    private readonly codeService: CodeService,
   ) {}
 
   @Get(':id')
@@ -27,42 +26,32 @@ export class GroupsController {
   }
 
   @Get()
-  async find() {
+  async find(): Promise<GroupDto[]> {
     return this.groupsService.find();
   }
-
+  @Post('code')
+  @HttpCode(201)
+  createJoinCode(@Body() createJoinCodeDto: JoinCodeDto): Promise<JoinCodeDto> {
+    return this.codeService.createJoinCode(createJoinCodeDto);
+  }
   @Post()
   @HttpCode(201)
-  create(@Body() createGroupDto: CreateGroupDto): Promise<CreateGroupDto> {
+  create(@Body() createGroupDto: CreateGroupDto): Promise<GroupDto> {
     return this.groupsService.createGroup(createGroupDto);
   }
 
-  @Post('join')
-  joinGroup(
-    @Body() userAccount: UserAccountDto,
-    GroupDto: GroupDto,
-  ): Promise<void> {
-    return this.codeService.joinGroup(
-      (GroupDto.id = '996e998f-129e-4a9f-a366-f661f5048264'),
-      (userAccount.id = '647c5917-2ed2-4e9d-85e9-ac596e0248e2'),
-    );
+  @Post('join/:code')
+  joinGroup(@Param('code') code: string): Promise<void> {
+    return this.codeService.joinGroup(code);
   }
 
-  // @Post()
-  // addStudentToGroup(@Body() joinGroupDto: JoinGroupDto) {
-  //   return this.groupsService.addStudentToGroup(
-  //     joinGroupDto.code,
-  //     joinGroupDto.userId,
-  //   );
-  // }
-
-  // @Post()
-  // removeStudentFromGroup(@Body() joinGroupDto: JoinGroupDto) {
-  //   return this.groupsService.removeStudentFromGroup(
-  //     joinGroupDto.code,
-  //     joinGroupDto.userId,
-  //   );
-  // }
+  @Delete('deleteStudent')
+  removeStudentFromGroup(
+    @Body() userId: string,
+    @Body() groupId: string,
+  ): Promise<void> {
+    return this.codeService.removeStudentFromGroup(groupId, userId);
+  }
 
   @Delete(':idOrCode')
   remove(@Param('idOrCode') id: string): Promise<{ statusCode: number }> {
