@@ -20,7 +20,7 @@ export class PermissionsGuard implements CanActivate {
     requiredPermissions: RequiredPermissions[],
     sessionPermissions: RequiredPermissions[],
   ): boolean {
-if (!sessionPermissions || !sessionPermissions.length) {
+    if (!sessionPermissions || !sessionPermissions.length) {
       throw new ForbiddenException('Invalid permissions');
     }
     const isAdmin = sessionPermissions.some(
@@ -58,6 +58,6 @@ if (!sessionPermissions || !sessionPermissions.length) {
     const request = context.switchToHttp().getRequest();
     const session = request.session;
     console.log('session', session);
-    return this.matchRoles(requiredPermissions, session.user.permissions||[]);
+    return this.matchRoles(requiredPermissions, session.user.permissions || []);
   }
 }

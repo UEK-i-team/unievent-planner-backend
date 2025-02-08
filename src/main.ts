@@ -17,7 +17,12 @@ async function bootstrap(): Promise<void> {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: false, sameSite: 'strict' },
+      cookie: {
+        secure: false,
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      },
     }),
   );
   app.enableCors({

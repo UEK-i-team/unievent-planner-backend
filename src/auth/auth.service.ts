@@ -14,7 +14,7 @@ export class AuthService {
     @InjectModel(UserAccount.name) private userModel: Model<UserAccount>,
     private firebaseService: FirebaseService,
     private accountsService: AccountsService,
-  ) { }
+  ) {}
 
   async verifyToken(token: string, request: Request): Promise<UserAccountDto> {
     try {

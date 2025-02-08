@@ -76,7 +76,6 @@ export class UpserDefaultsService implements OnModuleInit {
         systemAccount.createdBy = systemAccount.id;
         systemAccount.email = 'system@unievent-planner.com';
         systemAccount.firebaseId = 'defaultFirebaseId';
-        // systemAccount.role = [(await this.getSystemRole()).id];
         systemAccount.role = [];
         await systemAccount.save();
       }
@@ -102,7 +101,6 @@ export class UpserDefaultsService implements OnModuleInit {
         adminAccount.email = 'admin@unievent-planner.com';
         adminAccount.firebaseId = 'defaultFirebaseAdminId';
         adminAccount.role = [(await this.getAdminRole()).id];
-        // systemAccount.role = [];
         await adminAccount.save();
       }
       this.systemAccount = adminAccount;
@@ -112,21 +110,13 @@ export class UpserDefaultsService implements OnModuleInit {
 
   private async createRoles(): Promise<void> {
     await this.createRoleIfNotExists('PRESIDENT', [
-      // { action: Action.MANAGE, subject: Subject.GROUPS },
-      // { action: Action.MANAGE, subject: Subject.EVENTS },
+      AppPermissions.EVENTS.DISPLAY,
+      AppPermissions.EVENTS.MANAGE,
     ]);
     await this.createRoleIfNotExists('STUDENT', [
-      // { action: Action.MANAGE, subject: 'all' },
       AppPermissions.EVENTS.DISPLAY,
     ]);
-    await this.createRoleIfNotExists('ADMIN', [
-      AppPermissions.ADMIN,
-      // { action: Action.MANAGE, subject: Subject.ALL },
-    ]);
-    await this.createRoleIfNotExists('SYSTEM', [
-      AppPermissions.ADMIN,
-      // { action: Action.MANAGE, subject: Subject.ALL },
-    ]);
+    await this.createRoleIfNotExists('ADMIN', [AppPermissions.ADMIN]);
   }
 
   private async createRoleIfNotExists(
@@ -151,12 +141,10 @@ export class UpserDefaultsService implements OnModuleInit {
   async getStudentRole(): Promise<HydratedDocument<Role>> {
     return this.roleModel.findOne({ name: 'STUDENT' }).exec();
   }
-
-  async getSystemRole(): Promise<HydratedDocument<Role>> {
-    return this.roleModel.findOne({ name: 'SYSTEM' }).exec();
+  async getPresidentRole(): Promise<HydratedDocument<Role>> {
+    return this.roleModel.findOne({ name: 'PRESIDENT' }).exec();
   }
-
   async getAdminRole(): Promise<HydratedDocument<Role>> {
-    return this.roleModel.findOne({ name: 'SYSTEM' }).exec();
+    return this.roleModel.findOne({ name: 'ADMIN' }).exec();
   }
 }

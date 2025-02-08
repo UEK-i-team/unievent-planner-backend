@@ -60,4 +60,35 @@ export class AccountsService {
     });
     return userAccountDto;
   }
+
+  async addRole(email: string, roleName: string): Promise<UserAccountDto> {
+    const roleId =
+      roleName === 'STUDENT'
+        ? (await this.upserDefaultsService.getStudentRole()).id
+        : (await this.upserDefaultsService.getPresidentRole()).id;
+
+    const userAccount = await this.userAccountModel.findOne({ email }).exec();
+    if (!userAccount) {
+      throw new Error('User not found');
+    }
+    if (!userAccount.role.includes(roleId)) {
+      userAccount.role.push(roleId);
+    }
+    await userAccount.save();
+    const userAccountDto = plainToClass(UserAccountDto, userAccount, {
+      excludeExtraneousValues: true,
+    });
+    return userAccountDto;
+  }
+
+  async hasAnyRoleByEmail(email: string): Promise<boolean> {
+    const userAccount = await this.userAccountModel
+      .findOne({ email })
+      .lean()
+      .exec();
+    if (userAccount.role.length > 0) {
+      return true;
+    }
+    return false;
+  }
 }
