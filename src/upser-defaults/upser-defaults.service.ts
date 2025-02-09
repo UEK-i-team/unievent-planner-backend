@@ -96,16 +96,16 @@ export class UpserDefaultsService implements OnModuleInit {
         adminAccount.username = username;
         adminAccount.updatedAt = new Date();
         adminAccount.createdAt = new Date();
-        adminAccount.updatedBy = adminAccount.id;
-        adminAccount.createdBy = adminAccount.id;
+        adminAccount.updatedBy = (await this.getSystemAccount()).id;
+        adminAccount.createdBy = (await this.getSystemAccount()).id;
         adminAccount.email = 'admin@unievent-planner.com';
         adminAccount.firebaseId = 'defaultFirebaseAdminId';
         adminAccount.role = [(await this.getAdminRole()).id];
         await adminAccount.save();
       }
-      this.systemAccount = adminAccount;
+      this.adminAccount = adminAccount;
     }
-    return this.systemAccount;
+    return this.adminAccount;
   }
 
   private async createRoles(): Promise<void> {

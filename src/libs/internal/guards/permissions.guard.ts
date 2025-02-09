@@ -4,6 +4,7 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import {
@@ -12,9 +13,13 @@ import {
   RequiredPermissions,
   Subject,
 } from '../../shared';
+import { AuthService } from 'src/auth/auth.service';
 @Injectable()
 export class PermissionsGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private readonly authService: AuthService,
+  ) {}
 
   matchRoles(
     requiredPermissions: RequiredPermissions[],
@@ -42,7 +47,19 @@ export class PermissionsGuard implements CanActivate {
     return true;
   }
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const token = request.headers.authorization?.split(' ')[1];
+
+    if (!token) throw new UnauthorizedException('No token provided');
+
+    try {
+      const decodedToken = await this.authService.verifyToken(token, request);
+      request.user = decodedToken;
+    } catch (error) {
+      throw new UnauthorizedException(error);
+    }
+
     const requiredPermissions =
       this.reflector.get<RequiredPermissions[]>(
         PERMISSION_KEY,
@@ -55,9 +72,8 @@ export class PermissionsGuard implements CanActivate {
     if (!requiredPermissions || !requiredPermissions.length) {
       return true;
     }
-    const request = context.switchToHttp().getRequest();
+
     const session = request.session;
-    console.log('session', session);
     return this.matchRoles(requiredPermissions, session.user.permissions || []);
   }
 }
