@@ -9,14 +9,18 @@ export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
 
   @Post('add-student-role')
-  addStudentRole(@Req() req: Request): string {
-    this.accountsService.addRole(RoleType.STUDENT, req.session.user.email);
-    return `Student role added.`;
+  async addStudentRole(@Req() req: Request): Promise<string> {
+    return await this.accountsService.addRole(
+      RoleType.STUDENT,
+      req.session.user.email,
+    );
   }
 
   @Post('add-president-role')
-  addPresidentRole(@Req() req: Request): string {
-    this.accountsService.addRole(RoleType.PRESIDENT, req.session.user.email);
-    return `President role added.`;
+  async addPresidentRole(@Req() req: Request): Promise<string> {
+    return await this.accountsService.addRole(
+      RoleType.PRESIDENT,
+      req.session.user.email,
+    );
   }
 }

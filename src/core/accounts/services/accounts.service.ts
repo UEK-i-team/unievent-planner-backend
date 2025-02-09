@@ -63,7 +63,7 @@ export class AccountsService {
     return userAccountDto;
   }
 
-  async addRole(roleName: string, email: string): Promise<boolean> {
+  async addRole(roleName: string, email: string): Promise<string> {
     try {
       const roleId =
         roleName === RoleType.STUDENT
@@ -71,17 +71,15 @@ export class AccountsService {
           : (await this.upserDefaultsService.getPresidentRole()).id;
 
       const userAccount = await this.userAccountModel.findOne({ email }).exec();
-      if (userAccount.role.includes(roleId)) {
-        throw new Error('Role already assigned');
+      if (!userAccount.role.includes(roleId)) {
+        userAccount.role.push(roleId);
+        await userAccount.save();
+        return `${roleName} role added.`;
+      } else {
+        throw new Error(`${roleName} role already exists.`);
       }
-      userAccount.role.push(roleId);
-      await userAccount.save();
-
-      return true;
     } catch (error) {
-      throw new InternalServerErrorException(
-        `Failed to add role: ${error.message}`,
-      );
+      throw new InternalServerErrorException(error);
     }
   }
 

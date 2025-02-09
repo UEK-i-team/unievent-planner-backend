@@ -110,7 +110,6 @@ export class UpserDefaultsService implements OnModuleInit {
 
   private async createRoles(): Promise<void> {
     await this.createRoleIfNotExists(RoleType.PRESIDENT, [
-      AppPermissions.EVENTS.DISPLAY,
       AppPermissions.EVENTS.MANAGE,
     ]);
     await this.createRoleIfNotExists(RoleType.STUDENT, [

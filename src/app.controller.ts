@@ -10,9 +10,15 @@ export class AppController {
     return 'This is an admin route';
   }
 
-  @Get('user-route')
+  @Get('student-route')
   @Permissions(AppPermissions.EVENTS.DISPLAY)
-  getUserRoute(): string {
-    return 'This is a user route';
+  getStudentRoute(): string {
+    return 'This is a student route';
+  }
+
+  @Get('president-route')
+  @Permissions(AppPermissions.EVENTS.MANAGE)
+  getPresidentRoute(): string {
+    return 'This is a president route';
   }
 }
