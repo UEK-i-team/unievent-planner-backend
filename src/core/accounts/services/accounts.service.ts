@@ -27,6 +27,7 @@ export class AccountsService {
     createUserAccountDoc.firstName = createUserAccountDto.firstName;
     createUserAccountDoc.lastName = createUserAccountDto.lastName;
     createUserAccountDoc.groups = [];
+    // TODO: remove studentRole below when roles assignment is implemented
     createUserAccountDoc.role = [studentRole];
     createUserAccountDoc.createdBy = systemUser;
     createUserAccountDoc.updatedBy = systemUser;

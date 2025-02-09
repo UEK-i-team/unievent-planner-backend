@@ -4,9 +4,10 @@ import { Model } from 'mongoose';
 import { FirebaseService } from './firebase.service';
 import { UserAccount } from 'src/models';
 import { AccountsService } from 'src/core/accounts/services/accounts.service';
-import { CreateUserAccountDto, UserAccountDto } from 'src/core/accounts/dtos';
+import { CreateUserAccountDto } from 'src/core/accounts/dtos';
 import { Request } from 'express';
 import { uniqWith, isEqual } from 'lodash';
+import { ResponseTokenDTO } from './dtos';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +17,10 @@ export class AuthService {
     private accountsService: AccountsService,
   ) {}
 
-  async verifyToken(token: string, request: Request): Promise<UserAccountDto> {
+  async verifyToken(
+    token: string,
+    request: Request,
+  ): Promise<ResponseTokenDTO> {
     try {
       const decodedToken = await this.firebaseService.verifyGoogleToken(token);
       let user = await this.accountsService.findByEmail(decodedToken.email);
@@ -44,7 +48,19 @@ export class AuthService {
         email: user.email,
         permissions: permissionsArray,
       };
-      return user;
+
+      const responseToken: ResponseTokenDTO = {
+        username: user.username,
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        roles: user.role.map((role) => role.name),
+        groups: user.groups,
+        status: user.status,
+      };
+
+      return responseToken;
     } catch (error) {
       throw new UnauthorizedException(error);
     }

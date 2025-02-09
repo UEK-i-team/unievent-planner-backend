@@ -1,6 +1,5 @@
-import { Expose, Type } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { IsString, IsEmail } from 'class-validator';
-import { RoleDto } from 'src/core/roles/dtos';
 
 export class CreateUserAccountDto {
   @Expose()
@@ -14,10 +13,6 @@ export class CreateUserAccountDto {
   @Expose()
   @IsEmail()
   email!: string;
-
-  @Expose()
-  @Type(() => RoleDto)
-  roles!: RoleDto[];
 
   @Expose()
   @IsString()
