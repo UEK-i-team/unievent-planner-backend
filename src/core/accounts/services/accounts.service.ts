@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Model } from 'mongoose';
 import { UserAccount } from 'src/models';
 import { UpserDefaultsService } from 'src/upser-defaults/upser-defaults.service';
 import { CreateUserAccountDto, UserAccountDto } from '../dtos';
+import { RoleType } from 'src/libs';
 
 @Injectable()
 export class AccountsService {
@@ -62,24 +63,26 @@ export class AccountsService {
     return userAccountDto;
   }
 
-  async addRole(email: string, roleName: string): Promise<UserAccountDto> {
-    const roleId =
-      roleName === 'STUDENT'
-        ? (await this.upserDefaultsService.getStudentRole()).id
-        : (await this.upserDefaultsService.getPresidentRole()).id;
+  async addRole(roleName: string, email: string): Promise<boolean> {
+    try {
+      const roleId =
+        roleName === RoleType.STUDENT
+          ? (await this.upserDefaultsService.getStudentRole()).id
+          : (await this.upserDefaultsService.getPresidentRole()).id;
 
-    const userAccount = await this.userAccountModel.findOne({ email }).exec();
-    if (!userAccount) {
-      throw new Error('User not found');
-    }
-    if (!userAccount.role.includes(roleId)) {
+      const userAccount = await this.userAccountModel.findOne({ email }).exec();
+      if (userAccount.role.includes(roleId)) {
+        throw new Error('Role already assigned');
+      }
       userAccount.role.push(roleId);
+      await userAccount.save();
+
+      return true;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Failed to add role: ${error.message}`,
+      );
     }
-    await userAccount.save();
-    const userAccountDto = plainToClass(UserAccountDto, userAccount, {
-      excludeExtraneousValues: true,
-    });
-    return userAccountDto;
   }
 
   async hasAnyRoleByEmail(email: string): Promise<boolean> {

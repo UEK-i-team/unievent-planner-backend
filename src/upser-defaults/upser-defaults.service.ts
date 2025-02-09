@@ -5,7 +5,7 @@ import { Connection, HydratedDocument, Model } from 'mongoose';
 import { UserAccountDto } from '../core/accounts/dtos';
 import { MongooseModels, UserAccount, Role } from '../models';
 import { Types } from 'mongoose';
-import { AppPermissions } from 'src/libs';
+import { AppPermissions, RoleType } from 'src/libs';
 
 @Injectable()
 export class UpserDefaultsService implements OnModuleInit {
@@ -109,14 +109,14 @@ export class UpserDefaultsService implements OnModuleInit {
   }
 
   private async createRoles(): Promise<void> {
-    await this.createRoleIfNotExists('PRESIDENT', [
+    await this.createRoleIfNotExists(RoleType.PRESIDENT, [
       AppPermissions.EVENTS.DISPLAY,
       AppPermissions.EVENTS.MANAGE,
     ]);
-    await this.createRoleIfNotExists('STUDENT', [
+    await this.createRoleIfNotExists(RoleType.STUDENT, [
       AppPermissions.EVENTS.DISPLAY,
     ]);
-    await this.createRoleIfNotExists('ADMIN', [AppPermissions.ADMIN]);
+    await this.createRoleIfNotExists(RoleType.ADMIN, [AppPermissions.ADMIN]);
   }
 
   private async createRoleIfNotExists(
@@ -139,12 +139,12 @@ export class UpserDefaultsService implements OnModuleInit {
     }
   }
   async getStudentRole(): Promise<HydratedDocument<Role>> {
-    return this.roleModel.findOne({ name: 'STUDENT' }).exec();
+    return this.roleModel.findOne({ name: RoleType.STUDENT }).exec();
   }
   async getPresidentRole(): Promise<HydratedDocument<Role>> {
-    return this.roleModel.findOne({ name: 'PRESIDENT' }).exec();
+    return this.roleModel.findOne({ name: RoleType.PRESIDENT }).exec();
   }
   async getAdminRole(): Promise<HydratedDocument<Role>> {
-    return this.roleModel.findOne({ name: 'ADMIN' }).exec();
+    return this.roleModel.findOne({ name: RoleType.ADMIN }).exec();
   }
 }
