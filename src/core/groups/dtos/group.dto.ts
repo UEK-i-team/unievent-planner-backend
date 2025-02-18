@@ -1,12 +1,8 @@
 import { Expose, Type } from 'class-transformer';
 import { IsDefined } from 'class-validator';
-import {
-  AccountBasicDto,
-  BaseDto,
-  SystemStatus,
-  VerificationStatus,
-} from '../../../libs';
-import { JoinCodeDto } from '../../join-codes/dtos/join-code.dto';
+import { UserAccountDto } from 'src/core/accounts/dtos';
+import { JoinCodeDto } from 'src/core/join-codes/dtos';
+import { BaseDto, SystemStatus, VerificationStatus } from 'src/libs';
 
 export class GroupDto extends BaseDto {
   @Expose()
@@ -33,12 +29,12 @@ export class GroupDto extends BaseDto {
   rejectionReason?: string;
 
   @Expose()
-  @Type(() => AccountBasicDto)
-  president!: AccountBasicDto;
+  @Type(() => UserAccountDto)
+  president!: UserAccountDto;
 
   @Expose()
-  @Type(() => AccountBasicDto)
-  members!: AccountBasicDto[];
+  @Type(() => UserAccountDto)
+  members!: UserAccountDto[];
 
   @Expose()
   @Type(() => JoinCodeDto)
