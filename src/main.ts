@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './libs';
 import { WinstonModule } from 'nest-winston';
 import { WinstonLogger } from 'src/libs/internal/winston.logger';
+import * as session from 'express-session';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, {
@@ -11,6 +12,19 @@ async function bootstrap(): Promise<void> {
       instance: WinstonLogger,
     }),
   });
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: false,
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      },
+    }),
+  );
   app.enableCors({
     origin: process.env.CORS_ORIGIN || '*',
     methods: process.env.CORS_METHODS || 'GET,POST,PUT,DELETE,OPTIONS',
