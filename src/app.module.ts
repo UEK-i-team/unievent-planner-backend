@@ -1,8 +1,11 @@
-import { Logger, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Module, Logger } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
+import { PermissionsGuard } from './libs/internal/guards/permissions.guard';
+import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { getMongoConnectionString, PermissionGuard } from './libs';
+import { getMongoConnectionString } from './libs';
 import { MongooseModels } from './models';
 import { UpserDefaultsService } from './upser-defaults/upser-defaults.service';
 
@@ -20,12 +23,13 @@ import { UpserDefaultsService } from './upser-defaults/upser-defaults.service';
       }),
     }),
     MongooseModule.forFeature(MongooseModels),
+    AuthModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: PermissionGuard,
+      useClass: PermissionsGuard,
     },
     UpserDefaultsService,
     Logger,
