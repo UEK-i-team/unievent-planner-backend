@@ -6,9 +6,9 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { randomBytes } from 'crypto';
-import { UserAccountDto } from 'src/core/accounts/dtos';
+import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
 import { Model } from 'mongoose';
-import { Group, UserAccount, JoinCode } from 'src/models';
+import { Group, UserAccount, JoinCode } from '../../../models';
 import { JoinCodeDto } from '../dtos';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
 

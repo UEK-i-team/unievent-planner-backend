@@ -7,11 +7,11 @@ import {
   Param,
   Get,
 } from '@nestjs/common';
-import { CodeService } from 'src/core/join-codes/service/code.service';
+import { CodeService } from '../../join-codes/service/code.service';
 import { GroupsService } from '../service/groups.service';
 import { CreateGroupDto } from '../dtos/create-group.dto';
 import { GroupDto } from '../dtos/group.dto';
-import { JoinCodeDto } from 'src/core/join-codes/dtos';
+import { JoinCodeDto } from '../../join-codes/dtos/join-code.dto';
 
 @Controller('groups')
 export class GroupsController {

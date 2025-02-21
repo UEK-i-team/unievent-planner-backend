@@ -10,12 +10,12 @@ import { Group } from 'src/models';
 import { Model, Types } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { GroupDto } from '../dtos/group.dto';
-import { UserAccountDto } from 'src/core/accounts/dtos';
+import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
-import { CodeService } from 'src/core/join-codes/service/code.service';
-import { JoinCodeDto } from 'src/core/join-codes/dtos';
-import { SystemStatus } from 'src/libs/shared/enums';
-import { RoleDto } from 'src/core/roles/dtos';
+import { CodeService } from '../../../core/join-codes/service/code.service';
+import { JoinCodeDto } from '../../../core/join-codes/dtos/join-code.dto';
+import { SystemStatus } from '../../../libs/shared/enums';
+import { RoleDto } from '../../roles/dtos/role.dto';
 @Injectable()
 export class GroupsService {
   constructor(
