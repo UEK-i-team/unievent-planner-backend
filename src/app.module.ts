@@ -1,9 +1,11 @@
 import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { getMongoConnectionString } from './libs';
+import { PermissionGuard, getMongoConnectionString } from './libs';
 import { MongooseModels } from './models';
 import { GroupsModule } from './core/groups/groups.module';
+import { APP_GUARD } from '@nestjs/core/constants';
+import { UpserDefaultsService } from './upser-defaults/upser-defaults.service';
 
 @Module({
   imports: [
