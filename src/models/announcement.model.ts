@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { FieldConstraints } from 'src/libs';
+import { FieldConstraints } from '../libs';
 import { BaseClass } from './base.model';
 
 @Schema()

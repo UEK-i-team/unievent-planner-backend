@@ -7,7 +7,7 @@ import {
   Param,
   Get,
 } from '@nestjs/common';
-import { CodeService } from '../../join-codes/service/code.service';
+import { CodesService } from '../../join-codes/service/code.service';
 import { GroupsService } from '../service/groups.service';
 import { CreateGroupDto } from '../dtos/create-group.dto';
 import { GroupDto } from '../dtos/group.dto';
@@ -17,7 +17,7 @@ import { JoinCodeDto } from '../../join-codes/dtos/join-code.dto';
 export class GroupsController {
   constructor(
     private readonly groupsService: GroupsService,
-    private readonly codeService: CodeService,
+    private readonly codeService: CodesService,
   ) {}
 
   @Get(':id')
@@ -32,7 +32,7 @@ export class GroupsController {
   @Post('code')
   @HttpCode(201)
   createJoinCode(@Body() createJoinCodeDto: JoinCodeDto): Promise<JoinCodeDto> {
-    return this.codeService.createJoinCode(createJoinCodeDto);
+    return this.codeService.create(createJoinCodeDto);
   }
   @Post()
   @HttpCode(201)
@@ -54,7 +54,7 @@ export class GroupsController {
   }
 
   @Delete(':idOrCode')
-  remove(@Param('idOrCode') id: string): Promise<{ statusCode: number }> {
+  remove(@Param('idOrCode') id: string): Promise<void> {
     return this.groupsService.remove(id);
   }
 }

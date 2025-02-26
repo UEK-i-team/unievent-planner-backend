@@ -1,5 +1,5 @@
 import { Prop } from '@nestjs/mongoose';
-import { SystemStatus } from 'src/libs';
+import { SystemStatus } from '../libs';
 
 export abstract class BasicClass {
   @Prop({ required: true, default: SystemStatus.ACTIVE, enum: SystemStatus })

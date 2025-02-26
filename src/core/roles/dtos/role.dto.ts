@@ -5,7 +5,7 @@ import { Action, BaseDto, Subject, SystemStatus } from '../../../libs';
 export class PermissionRule {
   @Expose()
   action!: Action;
-  s;
+
   @Expose()
   subject!: Subject;
 }

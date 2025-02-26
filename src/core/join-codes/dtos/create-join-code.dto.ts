@@ -15,10 +15,7 @@ export class JoinCodeDto {
 
   @Expose()
   @IsDefined()
-  status!: SystemStatus;
-
-  @Expose()
-  uses!: number;
+  status!: SystemStatus.ACTIVE;
 
   @Expose()
   usesLeft?: number;

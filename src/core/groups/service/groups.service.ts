@@ -75,7 +75,7 @@ export class GroupsService {
       updatedBy: user,
       id: '',
     };
-    const joinCode = await this.codeService.createJoinCode(joinCodeDto);
+    const joinCode = await this.codeService.create(joinCodeDto);
 
     result.joinCodes = [new Types.ObjectId(joinCode.id)];
     await result.save();
