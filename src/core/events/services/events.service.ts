@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Event, EventTypeColorModel } from '../../../models';
@@ -8,14 +8,21 @@ import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.ser
 import { EventDto } from '../dtos/event.dto';
 import { UserAccountDto } from '../../../core/accounts/dtos/user-account.dto';
 import { EventType, EventTypeColor } from 'src/libs';
+import { WinstonLogger } from 'src/libs/internal/winston.logger';
 
 @Injectable()
-export class EventsService {
+export class EventsService implements OnModuleInit {
   constructor(
     @InjectModel(Event.name)
     private eventModel: Model<Event>,
     private upserDefaultsService: UpserDefaultsService,
   ) {}
+
+  async onModuleInit(): Promise<void> {
+    if (process.env.ADD_MOCK_DATA === 'true') {
+      await this.checkAndAddMockData();
+    }
+  }
 
   async findEvent(): Promise<EventDto[]> {
     const events = await this.eventModel
@@ -69,6 +76,7 @@ export class EventsService {
       excludeExtraneousValues: true,
     });
   }
+
   async deleteById(id: string): Promise<void> {
     await this.eventModel.deleteOne({ _id: id }).exec();
   }
@@ -87,7 +95,7 @@ export class EventsService {
     createEventDoc.description = 'This is a mock event description';
     createEventDoc.startDate = new Date();
     createEventDoc.endDate = new Date();
-    createEventDoc.groups = ['mockgroup'];
+    createEventDoc.groups = [];
     createEventDoc.typeModel = mockEventTypeColor;
     createEventDoc.createdAt = new Date();
     createEventDoc.updatedAt = new Date();
@@ -98,5 +106,20 @@ export class EventsService {
     return plainToClass(EventDto, result, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async checkAndAddMockData(): Promise<void> {
+    try {
+      const eventCount = await this.eventModel.countDocuments().exec();
+      if (eventCount === 0) {
+        WinstonLogger.info('No events found, adding mock data');
+        await this.createMock();
+        WinstonLogger.info('Mock data added');
+      } else {
+        WinstonLogger.info(`Found ${eventCount} events in the database`);
+      }
+    } catch (error) {
+      WinstonLogger.error('Error checking or adding mock data', error);
+    }
   }
 }

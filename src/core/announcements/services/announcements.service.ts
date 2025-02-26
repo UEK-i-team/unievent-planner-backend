@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
 import { Announcement } from 'src/models';
 import { Model } from 'mongoose';
 import { CreateAnnouncementDto } from '../dtos/create-announcement.dto';
@@ -6,14 +11,22 @@ import { AnnouncementDto } from '../dtos';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { UpserDefaultsService } from 'src/upser-defaults/upser-defaults.service';
+import { WinstonLogger } from 'src/libs/internal/winston.logger';
+import { UserAccountDto } from 'src/core/accounts/dtos';
 
 @Injectable()
-export class AnnouncementsService {
+export class AnnouncementsService implements OnModuleInit {
   constructor(
     @InjectModel(Announcement.name)
     private announcementModel: Model<Announcement>,
     private upserDefaultsService: UpserDefaultsService,
   ) {}
+
+  async onModuleInit(): Promise<void> {
+    if (process.env.ADD_MOCK_DATA === 'true') {
+      await this.checkAndAddMockData();
+    }
+  }
 
   async create(
     createAnnouncementDto: CreateAnnouncementDto,
@@ -34,17 +47,41 @@ export class AnnouncementsService {
 
   async createMock(): Promise<AnnouncementDto> {
     const createAnnouncementDoc = new this.announcementModel();
+
+    const user: UserAccountDto =
+      await this.upserDefaultsService.getSystemAccount();
     createAnnouncementDoc.title = 'Mock Announcement';
     createAnnouncementDoc.description =
       'This is a mock announcement description';
     createAnnouncementDoc.important = true;
     createAnnouncementDoc.createdAt = new Date();
     createAnnouncementDoc.updatedAt = new Date();
+    createAnnouncementDoc.createdBy = user.id;
+    createAnnouncementDoc.updatedBy = user.id;
 
     const result = await createAnnouncementDoc.save();
     return plainToClass(AnnouncementDto, result, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async checkAndAddMockData(): Promise<void> {
+    try {
+      const announcementCount = await this.announcementModel
+        .countDocuments()
+        .exec();
+      if (announcementCount === 0) {
+        WinstonLogger.info('No announcements found, adding mock data');
+        await this.createMock();
+        WinstonLogger.info('Mock data added');
+      } else {
+        WinstonLogger.info(
+          `Found ${announcementCount} announcements in the database`,
+        );
+      }
+    } catch (error) {
+      WinstonLogger.error('Error checking or adding mock data', error);
+    }
   }
 
   async find(): Promise<AnnouncementDto[]> {
