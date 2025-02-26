@@ -2,7 +2,7 @@ import { Expose, Type } from 'class-transformer';
 import { IsDefined } from 'class-validator';
 import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
 import { JoinCodeDto } from '../../join-codes/dtos/join-code.dto';
-import { BaseDto, SystemStatus, VerificationStatus } from '../../../libs/index';
+import { BaseDto, SystemStatus, VerificationStatus } from '../../../libs';
 
 export class GroupDto extends BaseDto {
   @Expose()

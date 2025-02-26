@@ -12,15 +12,15 @@ import { plainToClass } from 'class-transformer';
 import { GroupDto } from '../dtos/group.dto';
 import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
-import { CodeService } from '../../../core/join-codes/service/code.service';
+import { CodesService } from '../../../core/join-codes/service/code.service';
 import { JoinCodeDto } from '../../../core/join-codes/dtos/join-code.dto';
-import { SystemStatus } from '../../../libs/shared/enums';
+import { SystemStatus } from '../../../libs';
 import { RoleDto } from '../../roles/dtos/role.dto';
 @Injectable()
 export class GroupsService {
   constructor(
     private readonly upserDefaultsService: UpserDefaultsService,
-    private readonly codeService: CodeService,
+    private readonly codeService: CodesService,
     @InjectModel(Group.name) private readonly groupModel: Model<Group>,
   ) {}
 
@@ -56,10 +56,10 @@ export class GroupsService {
       id: '67a084ce81514c83dee6e2a4', // Fake ID for a temporary role
       name: 'Temporary Member',
       permissions: [], // Empty array or define permissions
-      status: SystemStatus.ACTIVE, // Assuming status is required
+      status: SystemStatus.ACTIVE,
       updatedAt: new Date(),
       createdAt: new Date(),
-      updatedBy: user, // Ensure correct type
+      updatedBy: user,
       createdBy: user,
     };
 
@@ -85,7 +85,7 @@ export class GroupsService {
     });
   }
 
-  async get(id: string): Promise<GroupDto | null> {
+  async get(id: string): Promise<GroupDto> {
     const group = await this.groupModel
       .findById(id)
       .populate('members')
@@ -125,13 +125,13 @@ export class GroupsService {
     return !!group;
   }
 
-  async remove(id: string): Promise<{ statusCode: number }> {
+  async remove(id: string): Promise<void> {
     const objectId = this.toObjectId(id);
     const group = await this.groupModel.findOneAndDelete(objectId).exec();
 
     if (!group) {
       throw new NotFoundException(`Group with ID or code ${id} not found`);
     }
-    return { statusCode: HttpStatus.NO_CONTENT };
+    throw { statusCode: HttpStatus.NO_CONTENT };
   }
 }

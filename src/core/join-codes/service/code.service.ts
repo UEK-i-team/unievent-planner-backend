@@ -13,7 +13,7 @@ import { JoinCodeDto } from '../dtos';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
 
 @Injectable()
-export class CodeService {
+export class CodesService {
   constructor(
     private readonly upserDefaultsService: UpserDefaultsService,
     @InjectModel(UserAccount.name)
