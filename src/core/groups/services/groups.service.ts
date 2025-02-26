@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
+  OnModuleInit,
 } from '@nestjs/common';
 import { CreateGroupDto } from '../dtos/create-group.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -12,10 +13,18 @@ import { plainToClass } from 'class-transformer';
 import { GroupDto } from '../dtos/group.dto';
 import { UserAccountDto } from 'src/core/accounts/dtos';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
+import { WinstonLogger } from 'src/libs/internal/winston.logger';
+
 @Injectable()
-export class GroupsService {
+export class GroupsService implements OnModuleInit {
   constructor(private readonly upserDefaultsService: UpserDefaultsService) {}
   @InjectModel(Group.name) private readonly GroupModel: Model<Group>;
+
+  async onModuleInit(): Promise<void> {
+    if (process.env.ADD_MOCK_DATA === 'true') {
+      await this.checkAndAddMockData();
+    }
+  }
 
   private toObjectId(id: string): Types.ObjectId {
     if (!Types.ObjectId.isValid(id)) {
@@ -50,6 +59,11 @@ export class GroupsService {
   async createMock(): Promise<GroupDto> {
     const createGroupDoc = new this.GroupModel();
 
+    const user: UserAccountDto =
+      await this.upserDefaultsService.getSystemAccount();
+    createGroupDoc.president = user.id;
+    createGroupDoc.updatedBy = user.id;
+    createGroupDoc.createdBy = user.id;
     createGroupDoc.name = 'Mock Group';
     createGroupDoc.courseName = 'Mock Course';
     createGroupDoc.description = 'This is a mock group description';
@@ -62,6 +76,21 @@ export class GroupsService {
     return plainToClass(GroupDto, result, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async checkAndAddMockData(): Promise<void> {
+    try {
+      const groupCount = await this.GroupModel.countDocuments().exec();
+      if (groupCount === 0) {
+        WinstonLogger.info('No groups found, adding mock data');
+        await this.createMock();
+        WinstonLogger.info('Mock data added');
+      } else {
+        WinstonLogger.info(`Found ${groupCount} groups in the database`);
+      }
+    } catch (error) {
+      WinstonLogger.error('Error checking or adding mock data', error);
+    }
   }
 
   async getGroup(id: string): Promise<GroupDto | null> {
