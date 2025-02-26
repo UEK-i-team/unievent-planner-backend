@@ -12,6 +12,7 @@ import { GroupsService } from '../service/groups.service';
 import { CreateGroupDto } from '../dtos/create-group.dto';
 import { GroupDto } from '../dtos/group.dto';
 import { JoinCodeDto } from '../../join-codes/dtos/join-code.dto';
+import { CreateJoinCodeDto } from '../../join-codes/dtos/create-join-code.dto';
 
 @Controller('groups')
 export class GroupsController {
@@ -31,7 +32,9 @@ export class GroupsController {
   }
   @Post('code')
   @HttpCode(201)
-  createJoinCode(@Body() createJoinCodeDto: JoinCodeDto): Promise<JoinCodeDto> {
+  createJoinCode(
+    @Body() createJoinCodeDto: CreateJoinCodeDto,
+  ): Promise<JoinCodeDto> {
     return this.codeService.create(createJoinCodeDto);
   }
   @Post()

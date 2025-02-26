@@ -11,6 +11,7 @@ import { Model } from 'mongoose';
 import { Group, UserAccount, JoinCode } from '../../../models';
 import { JoinCodeDto } from '../dtos/join-code.dto';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
+import { CreateJoinCodeDto } from '../dtos/create-join-code.dto';
 
 @Injectable()
 export class CodesService {
@@ -29,13 +30,13 @@ export class CodesService {
       .substring(0, length);
   }
 
-  async create(createJoinCodeDto: JoinCodeDto): Promise<JoinCodeDto> {
+  async create(createJoinCodeDto: CreateJoinCodeDto): Promise<JoinCodeDto> {
     const createJoinCodeDoc = new this.joinCodeModel();
 
     const user: UserAccountDto =
       await this.upserDefaultsService.getSystemAccount();
-    createJoinCodeDoc.role = createJoinCodeDto.role.id;
-    createJoinCodeDoc.group = createJoinCodeDto.group.id;
+    createJoinCodeDoc.role = createJoinCodeDto.role;
+    createJoinCodeDoc.group = createJoinCodeDto.group;
     createJoinCodeDoc.status = createJoinCodeDto.status;
     createJoinCodeDoc.usesLeft = createJoinCodeDto.usesLeft;
     createJoinCodeDoc.expiresAt = createJoinCodeDto.expiresAt;

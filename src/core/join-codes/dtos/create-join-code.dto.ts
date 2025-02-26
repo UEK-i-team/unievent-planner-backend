@@ -4,14 +4,12 @@ import { SystemStatus } from '../../../libs';
 import { GroupDto } from '../../groups/dtos/group.dto';
 import { RoleDto } from '../../roles/dtos/role.dto';
 
-export class JoinCodeDto {
+export class CreateJoinCodeDto {
   @Expose()
-  @Type(() => RoleDto)
-  role!: RoleDto;
+  role!: string;
 
   @Expose()
-  @Type(() => GroupDto)
-  group!: GroupDto;
+  group!: string;
 
   @Expose()
   @IsDefined()

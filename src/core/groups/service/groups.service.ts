@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { CreateGroupDto } from '../dtos/create-group.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Group } from 'src/models';
+import { Group } from '../../../models';
 import { Model, Types } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { GroupDto } from '../dtos/group.dto';
 import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
 import { CodesService } from '../../../core/join-codes/service/code.service';
-import { JoinCodeDto } from '../../../core/join-codes/dtos/join-code.dto';
+import { CreateJoinCodeDto } from '../../../core/join-codes/dtos/create-join-code.dto';
 import { SystemStatus } from '../../../libs';
 import { RoleDto } from '../../roles/dtos/role.dto';
 @Injectable()
@@ -63,17 +63,12 @@ export class GroupsService {
       createdBy: user,
     };
 
-    const joinCodeDto: JoinCodeDto = {
-      role: temporaryRole, // Define the role (adjust as needed)
-      group: groupSaved,
+    const joinCodeDto: CreateJoinCodeDto = {
+      role: temporaryRole.id, // Define the role (adjust as needed)
+      group: groupSaved.id,
       status: SystemStatus.ACTIVE,
-      uses: 0,
       usesLeft: 1,
       code: this.codeService.generateCode(),
-      updatedAt: new Date(),
-      createdAt: new Date(),
-      updatedBy: user,
-      id: '',
     };
     const joinCode = await this.codeService.create(joinCodeDto);
 
@@ -107,9 +102,6 @@ export class GroupsService {
       .populate('joinCodes')
       .lean()
       .exec();
-    if (!groups) {
-      throw new NotFoundException(`There are no groups`);
-    }
     return groups.map((currentElement) =>
       plainToClass(GroupDto, currentElement, {
         excludeExtraneousValues: true,
