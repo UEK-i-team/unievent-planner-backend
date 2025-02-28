@@ -25,10 +25,10 @@ import { UpserDefaultsService } from './upser-defaults/upser-defaults.service';
   ],
   controllers: [],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: PermissionGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: PermissionGuard,
+    // },
     UpserDefaultsService,
     Logger,
   ],

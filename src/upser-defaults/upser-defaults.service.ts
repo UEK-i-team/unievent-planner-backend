@@ -3,7 +3,7 @@ import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { Connection, HydratedDocument, Model } from 'mongoose';
 import { UserAccountDto } from 'src/core/accounts/dtos/user-account.dto';
-import { MongooseModels, UserAccount } from '../models/index';
+import { MongooseModels, UserAccount } from '../models';
 @Injectable()
 export class UpserDefaultsService implements OnModuleInit {
   private systemAccount?: HydratedDocument<UserAccount>;
