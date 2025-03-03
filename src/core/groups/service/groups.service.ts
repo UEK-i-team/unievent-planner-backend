@@ -7,7 +7,7 @@ import {
 import { CreateGroupDto } from '../dtos/create-group.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Group } from '../../../models';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { GroupDto } from '../dtos/group.dto';
 import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
@@ -16,6 +16,7 @@ import { CodesService } from '../../../core/join-codes/service/code.service';
 import { CreateJoinCodeDto } from '../../../core/join-codes/dtos/create-join-code.dto';
 import { SystemStatus } from '../../../libs';
 import { RoleDto } from '../../roles/dtos/role.dto';
+import { toObjectId } from '../../../libs/shared/utils/service.utils';
 @Injectable()
 export class GroupsService {
   constructor(
@@ -23,13 +24,6 @@ export class GroupsService {
     private readonly codeService: CodesService,
     @InjectModel(Group.name) private readonly groupModel: Model<Group>,
   ) {}
-
-  private toObjectId(id: string): Types.ObjectId {
-    if (!Types.ObjectId.isValid(id)) {
-      throw new BadRequestException(`Invalid ObjectId: ${id}`);
-    }
-    return new Types.ObjectId(id);
-  }
 
   async createGroup(createGroupDto: CreateGroupDto): Promise<GroupDto> {
     const createGroupDoc = new this.groupModel();
@@ -118,7 +112,7 @@ export class GroupsService {
   }
 
   async remove(id: string): Promise<void> {
-    const objectId = this.toObjectId(id);
+    const objectId = toObjectId(id);
     const group = await this.groupModel.findOneAndDelete(objectId).exec();
 
     if (!group) {
