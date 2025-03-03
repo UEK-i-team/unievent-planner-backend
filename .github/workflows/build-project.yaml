@@ -5,6 +5,7 @@ on:
     workflows: ['Basic Tests']
     types: [completed]
 jobs:
+  name: Build Production Servers
   build-project:
     needs: formatting_tests
     if: success()
