@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGroupDto } from '../dtos/create-group.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Group } from '../../../models';
