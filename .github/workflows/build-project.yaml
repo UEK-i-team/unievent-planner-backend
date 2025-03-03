@@ -1,6 +1,8 @@
 name: Build project
 
 on:
+  pull_request:
+    branches: [develop]
   workflow_run:
     workflows: ['Basic Tests']
     types: [completed]
