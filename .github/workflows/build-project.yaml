@@ -5,8 +5,8 @@ on:
     workflows: ['Basic Tests']
     types: [completed]
 jobs:
-  name: Build Production Servers
   build-project:
+    name: Build Production Servers
     needs: formatting_tests
     if: success()
     runs-on: ubuntu-latest
