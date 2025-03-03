@@ -72,7 +72,7 @@ export class GroupsService {
     };
     const joinCode = await this.codeService.create(joinCodeDto);
 
-    result.joinCodes = [new Types.ObjectId(joinCode.id)];
+    result.joinCodes = joinCode.id;
     await result.save();
 
     return plainToClass(GroupDto, result, {

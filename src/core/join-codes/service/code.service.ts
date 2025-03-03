@@ -7,11 +7,12 @@ import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { randomBytes } from 'crypto';
 import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Group, UserAccount, JoinCode } from '../../../models';
 import { JoinCodeDto } from '../dtos/join-code.dto';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
 import { CreateJoinCodeDto } from '../dtos/create-join-code.dto';
+import { SystemStatus } from 'src/libs';
 
 @Injectable()
 export class CodesService {
@@ -42,6 +43,7 @@ export class CodesService {
     createJoinCodeDoc.expiresAt = createJoinCodeDto.expiresAt;
     createJoinCodeDoc.createdAt = new Date();
     createJoinCodeDoc.updatedAt = new Date();
+    createJoinCodeDoc.updatedBy = user.id;
     createJoinCodeDoc.createdBy = user.id;
     createJoinCodeDoc.code = this.generateCode();
 
@@ -51,7 +53,7 @@ export class CodesService {
     });
   }
   async joinGroup(code: string): Promise<void> {
-    const userId = '67a5b6b354893a73691119ba';
+    const userId = '67c06c5b5be6b86ed0222fc1';
 
     const joinCode = await this.joinCodeModel
       .findOne({ code })
@@ -64,10 +66,11 @@ export class CodesService {
 
     const updatedUsesLeft = joinCode.usesLeft - 1;
     const updatedUses = joinCode.uses + 1;
+    let updatedStatus = joinCode.status;
 
-    if (updatedUsesLeft == 0) {
-      throw new BadRequestException(`Join code ${code} has no remaining uses`);
-    }
+    // if (updatedUsesLeft == 0) {
+    //   updatedStatus = SystemStatus.INACTIVE;
+    // }
 
     const updatedJoinCode = await this.joinCodeModel
       .findByIdAndUpdate(
@@ -77,6 +80,7 @@ export class CodesService {
             usesLeft: updatedUsesLeft,
             uses: updatedUses,
             updatedAt: new Date(),
+            status: updatedStatus,
           },
         },
         { new: true },
@@ -89,6 +93,7 @@ export class CodesService {
 
     const groupUpdated = await this.groupModel
       .findById(updatedJoinCode.group)
+      .populate('members')
       .exec();
     if (!groupUpdated) {
       throw new NotFoundException(
@@ -96,9 +101,15 @@ export class CodesService {
       );
     }
 
+    const userIdObjectId = new Types.ObjectId(userId);
+
+    // if (groupUpdated.members.some((userId) => userId.equals(userIdObjectId))) {
+    //   throw new BadRequestException('Student is already in the group');
+    // }
+
     const groupUpdateResult = await this.groupModel.findByIdAndUpdate(
       groupUpdated.id,
-      { $addToSet: { members: userId, updatedAt: new Date() } },
+      { $addToSet: { members: userId }, $set: { updatedAt: new Date() } },
       { new: true },
     );
     if (!groupUpdateResult) {
@@ -109,7 +120,10 @@ export class CodesService {
 
     const userUpdateResult = await this.userAccountModel.findByIdAndUpdate(
       userId,
-      { $addToSet: { groups: groupUpdateResult.id, updatedAt: new Date() } },
+      {
+        $addToSet: { groups: groupUpdateResult.id },
+        $set: { updatedAt: new Date() },
+      },
       { new: true },
     );
     if (!userUpdateResult) {
@@ -120,7 +134,7 @@ export class CodesService {
   async removeStudentFromGroup(groupId: string, userId: string): Promise<void> {
     const groupUpdateResult = await this.groupModel.findByIdAndUpdate(
       groupId,
-      { $pull: { members: userId }, $addToSet: { updatedAt: new Date() } },
+      { $pull: { members: userId }, $set: { updatedAt: new Date() } },
       { new: true },
     );
     if (!groupUpdateResult) {
@@ -129,7 +143,7 @@ export class CodesService {
 
     const userUpdateResult = await this.userAccountModel.findByIdAndUpdate(
       userId,
-      { $pull: { groups: groupId }, $addToSet: { updatedAt: new Date() } },
+      { $pull: { groups: groupId }, $set: { updatedAt: new Date() } },
       { new: true },
     );
     if (!userUpdateResult) {

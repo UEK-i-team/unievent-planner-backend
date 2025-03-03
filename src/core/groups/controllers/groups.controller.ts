@@ -50,9 +50,9 @@ export class GroupsController {
 
   @Delete('deleteStudent')
   removeStudentFromGroup(
-    @Body() userId: string,
-    @Body() groupId: string,
+    @Body() body: { userId: string; groupId: string },
   ): Promise<void> {
+    const { userId, groupId } = body;
     return this.codeService.removeStudentFromGroup(groupId, userId);
   }
 

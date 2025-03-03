@@ -3,9 +3,9 @@ name: Basic Tests
 on: [push]
 
 jobs:
-  formatting_tests:
-    name: Formatting Tests
-    if: github.ref_name != 'develop'
+  build-project:
+    needs: formatting_tests
+    if: success()
     runs-on: ubuntu-latest
 
     steps:
