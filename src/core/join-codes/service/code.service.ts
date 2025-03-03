@@ -7,13 +7,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
 import { randomBytes } from 'crypto';
 import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Group, UserAccount, JoinCode } from '../../../models';
 import { JoinCodeDto } from '../dtos/join-code.dto';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
 import { CreateJoinCodeDto } from '../dtos/create-join-code.dto';
-import { SystemStatus } from 'src/libs';
-
 @Injectable()
 export class CodesService {
   constructor(
@@ -66,7 +64,7 @@ export class CodesService {
 
     const updatedUsesLeft = joinCode.usesLeft - 1;
     const updatedUses = joinCode.uses + 1;
-    let updatedStatus = joinCode.status;
+    // let updatedStatus = joinCode.status;
 
     // if (updatedUsesLeft == 0) {
     //   updatedStatus = SystemStatus.INACTIVE;
@@ -80,7 +78,7 @@ export class CodesService {
             usesLeft: updatedUsesLeft,
             uses: updatedUses,
             updatedAt: new Date(),
-            status: updatedStatus,
+            // status: updatedStatus,
           },
         },
         { new: true },
@@ -101,7 +99,7 @@ export class CodesService {
       );
     }
 
-    const userIdObjectId = new Types.ObjectId(userId);
+    // const userIdObjectId = new Types.ObjectId(userId);
 
     // if (groupUpdated.members.some((userId) => userId.equals(userIdObjectId))) {
     //   throw new BadRequestException('Student is already in the group');
