@@ -9,6 +9,7 @@ import { AnnouncementsService } from './core/announcements/services/announcement
 import { AccountsService } from './core/accounts/services/accounts.service';
 import { EventsService } from './core/events/services/events.service';
 import { GroupsService } from './core/groups/services/groups.service';
+import { MockDataService } from './mock-data/mock-data.service';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { GroupsService } from './core/groups/services/groups.service';
     AccountsService,
     EventsService,
     GroupsService,
+    MockDataService,
   ],
 })
 export class AppModule {}

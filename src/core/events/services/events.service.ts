@@ -1,28 +1,20 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Event, EventTypeColorModel } from '../../../models';
+import { Event } from '../../../models';
 import { CreateEventDto } from '../dtos/create-event.dto';
 import { plainToClass } from 'class-transformer';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
 import { EventDto } from '../dtos/event.dto';
 import { UserAccountDto } from '../../../core/accounts/dtos/user-account.dto';
-import { EventType, EventTypeColor } from 'src/libs';
-import { WinstonLogger } from 'src/libs/internal/winston.logger';
 
 @Injectable()
-export class EventsService implements OnModuleInit {
+export class EventsService {
   constructor(
     @InjectModel(Event.name)
     private eventModel: Model<Event>,
     private upserDefaultsService: UpserDefaultsService,
   ) {}
-
-  async onModuleInit(): Promise<void> {
-    if (process.env.ADD_MOCK_DATA === 'true') {
-      await this.checkAndAddMockData();
-    }
-  }
 
   async findEvent(): Promise<EventDto[]> {
     const events = await this.eventModel
@@ -79,47 +71,5 @@ export class EventsService implements OnModuleInit {
 
   async deleteById(id: string): Promise<void> {
     await this.eventModel.deleteOne({ _id: id }).exec();
-  }
-
-  async createMock(): Promise<EventDto> {
-    const user: UserAccountDto =
-      await this.upserDefaultsService.getSystemAccount();
-
-    const mockEventTypeColor: EventTypeColorModel = {
-      color: EventTypeColor.CLASSES,
-      type: EventType.CLASSES,
-    };
-
-    const createEventDoc = new this.eventModel();
-    createEventDoc.title = 'Mock Event';
-    createEventDoc.description = 'This is a mock event description';
-    createEventDoc.startDate = new Date();
-    createEventDoc.endDate = new Date();
-    createEventDoc.groups = [];
-    createEventDoc.typeModel = mockEventTypeColor;
-    createEventDoc.createdAt = new Date();
-    createEventDoc.updatedAt = new Date();
-    createEventDoc.createdBy = user.id;
-    createEventDoc.updatedBy = user.id;
-
-    const result = await createEventDoc.save();
-    return plainToClass(EventDto, result, {
-      excludeExtraneousValues: true,
-    });
-  }
-
-  async checkAndAddMockData(): Promise<void> {
-    try {
-      const eventCount = await this.eventModel.countDocuments().exec();
-      if (eventCount === 0) {
-        WinstonLogger.info('No events found, adding mock data');
-        await this.createMock();
-        WinstonLogger.info('Mock data added');
-      } else {
-        WinstonLogger.info(`Found ${eventCount} events in the database`);
-      }
-    } catch (error) {
-      WinstonLogger.error('Error checking or adding mock data', error);
-    }
   }
 }
