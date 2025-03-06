@@ -20,35 +20,6 @@ export class GroupsService {
     @InjectModel(Group.name) private readonly groupModel: Model<Group>,
   ) {}
 
-  async find(): Promise<GroupDto[]> {
-    const groups = await this.groupModel
-      .find()
-      .populate('members')
-      .populate('joinCodes')
-      .lean()
-      .exec();
-    return groups.map((currentElement) =>
-      plainToClass(GroupDto, currentElement, {
-        excludeExtraneousValues: true,
-      }),
-    );
-  }
-
-  async get(id: string): Promise<GroupDto> {
-    const group = await this.groupModel
-      .findById(id)
-      .populate('members')
-      .populate('joinCodes')
-      .lean()
-      .exec();
-    if (!group) {
-      throw new NotFoundException(`Group with ID ${id} not found`);
-    }
-    return plainToClass(GroupDto, group, {
-      excludeExtraneousValues: true,
-    });
-  }
-
   async create(createGroupDto: CreateGroupDto): Promise<GroupDto> {
     const createGroupDoc = new this.groupModel();
 
@@ -73,7 +44,7 @@ export class GroupsService {
     const temporaryRole: RoleDto = {
       id: '67a084ce81514c83dee6e2a4', // Fake ID for a temporary role
       name: 'Temporary Member',
-      permissions: [], // Empty array or define permissions
+      permissions: [],
       status: SystemStatus.ACTIVE,
       updatedAt: new Date(),
       createdAt: new Date(),
