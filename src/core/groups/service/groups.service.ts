@@ -84,9 +84,8 @@ export class GroupsService {
     const joinCodeDto: CreateJoinCodeDto = {
       role: temporaryRole.id, // Define the role (adjust as needed)
       group: groupSaved.id,
-      status: SystemStatus.ACTIVE,
       usesLeft: 1,
-      code: this.codeService.generateCode(),
+      code: this.codeService.code,
     };
     const joinCode = await this.codeService.create(joinCodeDto);
 
@@ -96,6 +95,41 @@ export class GroupsService {
     return plainToClass(GroupDto, result, {
       excludeExtraneousValues: true,
     });
+  }
+
+  async get(id: string): Promise<GroupDto> {
+    const group = await this.groupModel
+      .findById(id)
+      .populate('members')
+      .lean()
+      .exec();
+    if (!group) {
+      throw new NotFoundException(`Group with ID ${id} not found`);
+    }
+    return plainToClass(GroupDto, group, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async find(): Promise<GroupDto[]> {
+    const groups = await this.groupModel
+      .find()
+      .populate('members')
+      .lean()
+      .exec();
+    return groups.map((currentElement) =>
+      plainToClass(GroupDto, currentElement, {
+        excludeExtraneousValues: true,
+      }),
+    );
+  }
+
+  private async groupExists(id: string): Promise<boolean> {
+    const group = await this.groupModel.findById(id).lean().exec();
+    if (!id) {
+      return false;
+    }
+    return !!group;
   }
 
   async remove(id: string): Promise<void> {

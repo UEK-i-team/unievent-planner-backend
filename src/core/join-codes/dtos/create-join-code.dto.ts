@@ -10,10 +10,6 @@ export class CreateJoinCodeDto {
   group!: string;
 
   @Expose()
-  @IsDefined()
-  status!: SystemStatus.ACTIVE;
-
-  @Expose()
   usesLeft?: number;
 
   @Expose()

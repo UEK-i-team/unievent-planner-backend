@@ -5,13 +5,14 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { plainToClass } from 'class-transformer';
-import { randomBytes } from 'crypto';
+import { generateKey, randomBytes } from 'crypto';
 import { UserAccountDto } from '../../accounts/dtos/user-account.dto';
 import { Model } from 'mongoose';
 import { Group, UserAccount, JoinCode } from '../../../models';
 import { JoinCodeDto } from '../dtos/join-code.dto';
 import { UpserDefaultsService } from '../../../upser-defaults/upser-defaults.service';
 import { CreateJoinCodeDto } from '../dtos/create-join-code.dto';
+import { generateCode } from '../../../libs/shared/consts/generate-code.const';
 @Injectable()
 export class CodesService {
   constructor(
@@ -22,12 +23,7 @@ export class CodesService {
     @InjectModel(Group.name) private readonly groupModel: Model<Group>,
   ) {}
 
-  generateCode(length: number = 6): string {
-    return randomBytes(length)
-      .toString('base64')
-      .replace(/[^a-zA-Z0-9]/g, '')
-      .substring(0, length);
-  }
+  code = generateCode();
 
   async create(createJoinCodeDto: CreateJoinCodeDto): Promise<JoinCodeDto> {
     const createJoinCodeDoc = new this.joinCodeModel();
@@ -36,14 +32,13 @@ export class CodesService {
       await this.upserDefaultsService.getSystemAccount();
     createJoinCodeDoc.role = createJoinCodeDto.role;
     createJoinCodeDoc.group = createJoinCodeDto.group;
-    createJoinCodeDoc.status = createJoinCodeDto.status;
     createJoinCodeDoc.usesLeft = createJoinCodeDto.usesLeft;
     createJoinCodeDoc.expiresAt = createJoinCodeDto.expiresAt;
     createJoinCodeDoc.createdAt = new Date();
     createJoinCodeDoc.updatedAt = new Date();
     createJoinCodeDoc.updatedBy = user.id;
     createJoinCodeDoc.createdBy = user.id;
-    createJoinCodeDoc.code = this.generateCode();
+    createJoinCodeDoc.code = this.code;
 
     const result = await createJoinCodeDoc.save();
     return plainToClass(JoinCodeDto, result, {

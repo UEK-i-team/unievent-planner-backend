@@ -58,7 +58,7 @@ export class GroupsController {
     return this.codeService.joinGroup(code);
   }
 
-  @Delete('deleteStudent')
+  @Delete('delete-student')
   removeStudentFromGroup(
     @Body() body: { userId: string; groupId: string },
   ): Promise<void> {
