@@ -30,6 +30,7 @@ export class Role extends BaseClass {
   @Prop({
     required: true,
     trim: true,
+    unique: true,
     maxlength: FieldConstraints.CODE.MAX_LENGTH,
     pattern: FieldConstraints.CODE.PATTERN,
   })
