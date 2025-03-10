@@ -1,0 +1,64 @@
+name: Build project
+
+on:
+  workflow_run:
+    workflows: ['Basic Tests']
+    types: [completed]
+
+jobs:
+  build-project:
+    name: Build Production Servers
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Report status to PR
+        if: success()
+        run: |
+          gh api repos/${{ github.repository }}/statuses/${{ github.event.workflow_run.head_sha }} \
+          -X POST \
+          -F state=success \
+          -F context="Build Project" \
+          -F description="Build completed successfully"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Report failure to PR
+        if: failure()
+        run: |
+          gh api repos/${{ github.repository }}/statuses/${{ github.event.workflow_run.head_sha }} \
+          -X POST \
+          -F state=failure \
+          -F context="Build Project" \
+          -F description="Build Project failed"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  report-skipped-for-build-project:
+    name: Report Skipped Status
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: Report skipped to PR
+        run: |
+          gh api repos/${{ github.repository }}/statuses/${{ github.event.workflow_run.head_sha }} \
+          -X POST \
+          -F state=error \
+          -F context="Build Project" \
+          -F description="Build Project skipped due to failure in Basic Tests"
+          exit 1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
