@@ -25,10 +25,10 @@ import { RolesModule } from './core/roles/roles.module';
   ],
   controllers: [],
   providers: [
-    /*{
-    provide: APP_GUARD,
-    useClass: PermissionGuard,
-    },*/
+    {
+      provide: APP_GUARD,
+      useClass: PermissionGuard,
+    },
     UpserDefaultsService,
     Logger,
   ],
